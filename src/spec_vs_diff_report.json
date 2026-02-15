@@ -1,0 +1,70 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-15T00:44:53.062Z",
+  "summary": "Implements a Puro-themed chat UI with Internet Identity gating, backend per-user chat history, and trailing-asterisk action classification. However, the backend response generator does not clearly produce in-character “Puro” roleplay replies for normal dialogue (it largely echoes the user), and several extra features (profiles/access control/admin token/social footer) appear beyond the request.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Assistant roleplays as “Puro” with a consistent in-character voice across messages, responding with short conversational replies.",
+      "reason": "Backend dialogue handling appears to echo the user’s dialogue content verbatim rather than generating an in-character Puro reply; action reply text is also generic and not clearly in-character. This risks failing the ‘in-character voice’ AC.",
+      "evidence": [
+        "backend/main.mo (generateResponse: case #dialogue returns (userMessage.content, #dialogue))",
+        "backend/main.mo (generateResponse: action reply text is generic: \"Puro sees you ... Actions like jumping... might be part of your imagination!\")"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "User profile system (name capture) with a mandatory profile setup modal before chat access.",
+      "reason": "Not requested by any REQ; the BuildRequest focuses on chat + action parsing + sessions + theme + avatar.",
+      "evidence": [
+        "frontend/src/components/profile/ProfileSetupModal.tsx",
+        "frontend/src/App.tsx",
+        "backend/main.mo (UserProfile, getCallerUserProfile, saveCallerUserProfile)",
+        "frontend/src/hooks/useQueries.ts (useGetCallerUserProfile/useSaveCallerUserProfile)"
+      ]
+    },
+    {
+      "description": "Authorization/access-control layer with admin initialization via secret URL parameter and permission checks for chat/profile methods.",
+      "reason": "BuildRequest only constrained auth providers (II only if used) and backend structure; it did not request RBAC/admin-token based access control.",
+      "evidence": [
+        "backend/main.mo (MixinAuthorization, AccessControl, permission checks, _initializeAccessControlWithSecret usage implied)",
+        "frontend/src/hooks/useActor.ts (getSecretParameter('caffeineAdminToken'), actor._initializeAccessControlWithSecret)",
+        "frontend/src/utils/urlParams.ts (URL param persistence utilities)"
+      ]
+    },
+    {
+      "description": "Footer attribution and social share UI (X/Facebook) plus caffeine.ai referral link.",
+      "reason": "Not requested; additional UI/marketing/social elements beyond chat requirements.",
+      "evidence": [
+        "frontend/src/components/layout/ChatLayout.tsx (footer with caffeine.ai link, Share: SiX/SiFacebook)"
+      ]
+    }
+  ],
+  "confidence": 0.74,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/auth/LoginButton.tsx",
+    "frontend/src/components/chat/ChatComposer.tsx",
+    "frontend/src/components/chat/ChatTranscript.tsx",
+    "frontend/src/components/chat/MessageBubble.tsx",
+    "frontend/src/components/chat/PuroAvatar.tsx",
+    "frontend/src/components/layout/ChatLayout.tsx",
+    "frontend/src/components/profile/ProfileSetupModal.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/ChatPage.tsx",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

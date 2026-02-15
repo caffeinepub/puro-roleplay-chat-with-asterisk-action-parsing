@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "AI chat app to roleplay chatting with Puro, treating user inputs marked with an asterisk as action/roleplay cues.",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Friendly anthropomorphic creature avatar portrait, soft sci‑fi lab aesthetic, clean background (puro-avatar.dim_512x512.png)",
+  "existing_features": [
+    {
+      "id": "feature-implement-a-chat-experience-where-the-assistant-roleplays-as-the-character-puro-maintaining-a-consistent-in-character-voice-across-messages-and-responding-to-the-user-s-inputs-with-short-conversational-replies",
+      "title": "Implement a chat experience where the assistant roleplays as the character “Puro”, maintaining a consistent in-character voice across messages, and responding to the user’s inputs with short conversational replies.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-parse-user-input-for-roleplay-actions-marked-by-an-asterisk-when-the-user-types-text-ending-with-e-g-waves-treat-it-as-an-action-rather-than-spoken-dialogue-store-render-it-as-an-action-and-have-puro-acknowledge-it-as-an-action-in-the-reply",
+      "title": "Parse user input for roleplay actions marked by an asterisk: when the user types text ending with “*” (e.g., “waves*”), treat it as an action rather than spoken dialogue, store/render it as an action, and have Puro acknowledge it as an action in the reply.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-frontend-chat-ui-using-react-with-a-message-list-input-box-and-send-action-include-loading-sending-states-and-error-handling-render-action-messages-differently-from-dialogue-messages-and-support-enter-to-send-with-shift-enter-for-newline",
+      "title": "Build the frontend chat UI using React with a message list, input box, and send action; include loading/sending states and error handling; render action messages differently from dialogue messages; and support Enter-to-send (with Shift+Enter for newline).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-choose-and-apply-a-coherent-visual-theme-for-the-app-colors-typography-spacing-and-component-styling-that-fits-a-friendly-sci-fi-lab-creature-companion-chat-vibe-and-apply-it-consistently-across-the-chat-screen",
+      "title": "Choose and apply a coherent visual theme for the app (colors, typography, spacing, and component styling) that fits a friendly sci‑fi lab/creature-companion chat vibe, and apply it consistently across the chat screen.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-puro-avatar-image-as-a-static-asset-and-display-it-in-the-ui-e-g-header-and-or-beside-puro-s-messages-store-generated-images-under-frontend-public-assets-generated-and-reference-them-directly-from-the-frontend",
+      "title": "Add a Puro avatar image as a static asset and display it in the UI (e.g., header and/or beside Puro’s messages). Store generated images under frontend/public/assets/generated and reference them directly from the frontend.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Build an AI chat interface where the assistant roleplays as Puro.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Interpret user text containing an asterisk (*) as an action describing what the user is doing (roleplay action parsing).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Add backend support for chat sessions: store per-user chat history (including whether each user message is an action vs dialogue), and expose canister methods to (a) send a new user message and receive Puro’s response, and (b) fetch the current session history.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Implement a deterministic, local (non-third-party) response generator for Puro in the backend that produces replies based on the latest user message and recent history (including special handling for action messages).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Puro roleplay chat with asterisk (*) action parsing",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

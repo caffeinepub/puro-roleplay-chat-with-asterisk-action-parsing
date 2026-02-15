@@ -1,0 +1,148 @@
+{
+  "kind": "build_request",
+  "title": "Puro roleplay chat with asterisk (*) action parsing",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Implement a chat experience where the assistant roleplays as the character “Puro”, maintaining a consistent in-character voice across messages, and responding to the user’s inputs with short conversational replies.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Make an ai chat where you talk to puro..."
+        ]
+      },
+      "acceptanceCriteria": [
+        "The UI provides a chat interface with messages from the user and from “Puro”.",
+        "Assistant messages are clearly attributed to “Puro” (name/label/avatar).",
+        "Puro’s responses remain in-character (friendly roleplay tone) and do not switch personas mid-conversation."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Parse user input for roleplay actions marked by an asterisk: when the user types text ending with “*” (e.g., “waves*”), treat it as an action rather than spoken dialogue, store/render it as an action, and have Puro acknowledge it as an action in the reply.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "And if you type something with an * after it that means you are doing what you typed in"
+        ]
+      },
+      "acceptanceCriteria": [
+        "If the user sends a message that ends with '*', the system classifies it as an action and removes only the trailing '*' marker from the stored/displayed action text.",
+        "Action messages render distinctly from normal dialogue (e.g., italicized or bracketed).",
+        "Puro’s next response explicitly reacts to the action (e.g., acknowledging what the user did) rather than treating it as quoted speech."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add backend support for chat sessions: store per-user chat history (including whether each user message is an action vs dialogue), and expose canister methods to (a) send a new user message and receive Puro’s response, and (b) fetch the current session history.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Make an ai chat where you talk to puro..."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Chat history persists across page reloads for the same authenticated principal (or a stable anonymous session if authentication is not used).",
+        "History entries include: timestamp/order, author (user vs Puro), message text, and message type (dialogue vs action).",
+        "A frontend refresh can reconstruct the full conversation from the backend history API."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Implement a deterministic, local (non-third-party) response generator for Puro in the backend that produces replies based on the latest user message and recent history (including special handling for action messages).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Make an ai chat where you talk to puro..."
+        ]
+      },
+      "acceptanceCriteria": [
+        "The app does not call external LLM APIs or third-party AI services to generate responses.",
+        "Given the same chat history and input, the response generator returns the same output (deterministic).",
+        "Action inputs and dialogue inputs produce appropriately different response patterns (acknowledge actions vs respond conversationally)."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Build the frontend chat UI using React with a message list, input box, and send action; include loading/sending states and error handling; render action messages differently from dialogue messages; and support Enter-to-send (with Shift+Enter for newline).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Make an ai chat where you talk to puro..."
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can type a message and press Enter to send; Shift+Enter inserts a newline.",
+        "While awaiting the backend reply, the UI shows a sending/loading indicator and prevents duplicate sends.",
+        "On backend error, the UI displays a readable error and keeps the unsent text available to retry.",
+        "Action messages (ending with '*') are visually distinct from dialogue messages in the transcript."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Choose and apply a coherent visual theme for the app (colors, typography, spacing, and component styling) that fits a friendly sci‑fi lab/creature-companion chat vibe, and apply it consistently across the chat screen.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The chat page has a consistent, non-default visual identity (background, message bubbles, typography).",
+        "Theme avoids a generic look and is applied consistently to header, transcript, input area, and buttons.",
+        "Do not use a predominantly blue/purple theme."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Add a Puro avatar image as a static asset and display it in the UI (e.g., header and/or beside Puro’s messages). Store generated images under frontend/public/assets/generated and reference them directly from the frontend.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "talk to puro"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A Puro avatar image exists at frontend/public/assets/generated and is used in the UI.",
+        "Assistant messages are visually associated with the avatar (e.g., in the message row or header).",
+        "No backend routing is used to serve the image; it is loaded as a static asset."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor (no additional backend services).",
+    "Do not use external AI/LLM APIs or third-party authentication providers; if authentication is used, use Internet Identity only.",
+    "Do not modify files in frontend immutable paths (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui); compose or add new code instead."
+  ],
+  "nonGoals": [
+    "Voice chat, speech-to-text, or audio playback.",
+    "Real-time streaming responses or WebSocket-based messaging.",
+    "Image generation based on user prompts inside the app (only include static assets).",
+    "Multiple characters or a character creator (only Puro for now)."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Friendly anthropomorphic creature avatar portrait, soft sci‑fi lab aesthetic, clean background (puro-avatar.dim_512x512.png)"
+    ],
+    "edits": []
+  }
+}

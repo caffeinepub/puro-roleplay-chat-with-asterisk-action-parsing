@@ -1,0 +1,163 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Puro roleplay chat (React) with asterisk action parsing",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Provide a chat experience where the assistant roleplays as “Puro” with clearly attributed messages and consistent in-character short replies.",
+      "acceptanceCriteria": [
+        "The UI provides a chat interface with messages from the user and from “Puro”.",
+        "Assistant messages are clearly attributed to “Puro” (name/label/avatar).",
+        "Puro’s responses remain in-character (friendly roleplay tone) and do not switch personas mid-conversation."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the top-level app shell that gates access via Internet Identity (using the existing authorization/auth hooks) and renders the chat screen once authenticated. Include Puro attribution (name + avatar in header). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ChatPage.tsx",
+          "operation": "create",
+          "description": "Implement the primary chat screen that displays the transcript and integrates with the backend send/history capabilities to show user/Puro turns with clear attribution to Puro. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/LoginButton.tsx",
+          "operation": "create",
+          "description": "Add a login/logout button that uses the existing Internet Identity hook and clears cached data on logout (per authorization component guidance). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/profile/ProfileSetupModal.tsx",
+          "operation": "create",
+          "description": "Create a profile setup modal that prompts for a display name on first login (using getCallerUserProfile/saveCallerUserProfile) and prevents showing the chat until a profile exists. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useCurrentUserProfile.ts",
+          "operation": "create",
+          "description": "Add a React Query hook to fetch the caller profile (getCallerUserProfile) with loading states designed to avoid modal flash; used by App gating logic. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Detect user messages ending with '*' as roleplay actions, render them distinctly, and ensure Puro’s next reply acknowledges actions as actions.",
+      "acceptanceCriteria": [
+        "If the user sends a message that ends with '*', the system classifies it as an action and removes only the trailing '*' marker from the stored/displayed action text.",
+        "Action messages render distinctly from normal dialogue (e.g., italicized or bracketed).",
+        "Puro’s next response explicitly reacts to the action (e.g., acknowledging what the user did) rather than treating it as quoted speech."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/chat/actionParsing.ts",
+          "operation": "create",
+          "description": "Add a small utility to classify user input as dialogue vs action when it ends with '*', and to strip only the trailing '*' marker for stored/displayed content. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ChatPage.tsx",
+          "operation": "modify",
+          "description": "Wire action parsing into the send flow so messages ending with '*' are sent/stored/rendered as action type (with trailing '*' removed), and render action messages with distinct styling from dialogue in the transcript. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/chat/MessageBubble.tsx",
+          "operation": "create",
+          "description": "Create a message row/bubble component that visually distinguishes action vs dialogue and clearly attributes Puro vs user (including optional avatar on Puro messages). Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Build the React chat UI with transcript, input, send behavior (Enter/Shift+Enter), loading/sending state, and error handling with retry.",
+      "acceptanceCriteria": [
+        "User can type a message and press Enter to send; Shift+Enter inserts a newline.",
+        "While awaiting the backend reply, the UI shows a sending/loading indicator and prevents duplicate sends.",
+        "On backend error, the UI displays a readable error and keeps the unsent text available to retry.",
+        "Action messages (ending with '*') are visually distinct from dialogue messages in the transcript."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useChatSession.ts",
+          "operation": "create",
+          "description": "Add a hook that wraps chat history fetch (getHistory) and send (sendMessage) with React Query state (loading/error), supports optimistic UI where appropriate, and prevents duplicate sends while awaiting a reply. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ChatPage.tsx",
+          "operation": "modify",
+          "description": "Implement message list, composer input, Enter-to-send (Shift+Enter newline), disabled send while sending, visible sending indicator, and readable error UI that preserves unsent text for retry. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/chat/ChatComposer.tsx",
+          "operation": "create",
+          "description": "Create the chat input/composer component handling Enter/Shift+Enter behavior, send button, and local draft preservation when send fails. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/chat/ChatTranscript.tsx",
+          "operation": "create",
+          "description": "Create a scrollable transcript component that renders the ordered message list using MessageBubble and supports auto-scroll-to-bottom on new messages. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Apply a consistent friendly sci‑fi lab/creature-companion visual theme across the chat screen (avoid predominantly blue/purple).",
+      "acceptanceCriteria": [
+        "The chat page has a consistent, non-default visual identity (background, message bubbles, typography).",
+        "Theme avoids a generic look and is applied consistently to header, transcript, input area, and buttons.",
+        "Do not use a predominantly blue/purple theme."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Define global theme tokens (CSS variables used by Tailwind/shadcn styling) and apply a cohesive sci‑fi lab vibe using non-blue/purple dominant hues (e.g., warm neutrals + soft greens/ambers), including background, typography, and spacing defaults. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend Tailwind theme tokens (if needed) to support the chosen lab/companion palette and consistent styling across chat components, ensuring the palette is not predominantly blue/purple. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/ChatLayout.tsx",
+          "operation": "create",
+          "description": "Add a layout wrapper for the chat page that applies the theme consistently to header, transcript area, and composer area. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ChatPage.tsx",
+          "operation": "modify",
+          "description": "Adopt the shared ChatLayout and ensure message bubbles, buttons, inputs, and header styling consistently match the chosen theme. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Add a static Puro avatar image asset and display it in the UI (header and/or beside Puro messages).",
+      "acceptanceCriteria": [
+        "A Puro avatar image exists at frontend/public/assets/generated and is used in the UI.",
+        "Assistant messages are visually associated with the avatar (e.g., in the message row or header).",
+        "No backend routing is used to serve the image; it is loaded as a static asset."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/puro-avatar.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated static Puro avatar image at frontend/public/assets/generated/puro-avatar.dim_512x512.png and ensure it is committed as a public asset."
+        },
+        {
+          "path": "frontend/src/components/chat/PuroAvatar.tsx",
+          "operation": "create",
+          "description": "Create a small avatar component that references the static asset at frontend/public/assets/generated/puro-avatar.dim_512x512.png and can be used in the header and message rows. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/chat/MessageBubble.tsx",
+          "operation": "modify",
+          "description": "Display the Puro avatar alongside Puro-authored messages using the PuroAvatar component, keeping user messages visually distinct. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Show the Puro avatar in the app header (or chat header area) to reinforce assistant attribution, referencing frontend/public/assets/generated/puro-avatar.dim_512x512.png as a static asset. Verify the component's usage instructions before implementing."
+        }
+      ]
+    }
+  ]
+}
