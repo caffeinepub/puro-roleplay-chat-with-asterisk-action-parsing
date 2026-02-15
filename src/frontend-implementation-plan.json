@@ -1,26 +1,80 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Update Puro avatar to match Changed (DragonSnow)",
+  "title": "Enable guest chat sessions and remove Internet Identity gating (frontend)",
   "requirements": [
     {
-      "id": "REQ-10",
-      "summary": "Replace the Puro avatar asset with an updated image matching Puro from Changed and wire it into the PuroAvatar component.",
+      "id": "REQ-11",
+      "summary": "Remove the authentication gate so the app opens directly into the chat experience in guest mode by default.",
       "acceptanceCriteria": [
-        "A new or updated Puro avatar image asset exists under frontend/public/assets/generated.",
-        "The PuroAvatar component displays the updated asset and still renders correctly at all supported sizes (sm/md/lg/xl).",
-        "No user-facing text references anything other than “Puro” (English only)."
+        "Opening the app takes the user directly to the chat experience without requiring a login step.",
+        "No login screen is shown anywhere in the normal user flow.",
+        "All user-facing text related to logging in is removed or replaced with guest-friendly wording."
       ],
       "file_operations": [
         {
-          "path": "frontend/public/assets/generated/puro-avatar-changed.dim_512x512.png",
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Remove the unauthenticated login-screen branch and associated login-focused copy; render the chat flow by default and only gate on whether a profile exists (guest-friendly)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "summary": "Remove Internet Identity login/logout UI from the chat layout header while keeping Puro branding.",
+      "acceptanceCriteria": [
+        "The chat header does not render the LoginButton component.",
+        "The app header still shows Puro branding/avatar as before.",
+        "No “Login”, “Logout”, or “Logging in...” text is visible in the UI."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/layout/ChatLayout.tsx",
+          "operation": "modify",
+          "description": "Remove LoginButton import and rendering from the header while preserving the existing Puro avatar/branding area and header layout."
+        }
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "summary": "Introduce a per-browser guest session id persisted in browser storage and use it to scope chat history and profile operations when running anonymously.",
+      "acceptanceCriteria": [
+        "Frontend generates and persists a stable guest session id in browser storage (survives refresh).",
+        "Backend stores and retrieves chat history based on this guest session id for anonymous callers (so different browsers/devices do not share one anonymous chat history).",
+        "Saving and fetching the user profile works in guest mode using the same guest session id."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useGuestSessionId.ts",
           "operation": "create",
-          "description": "Add the updated Puro avatar image (edited from frontend/public/assets/generated/puro-avatar.dim_512x512.png) that visually matches Puro from Changed (DragonSnow), with a clean background suitable for circular cropping."
+          "description": "Add a small hook that generates a stable guest session id (e.g., UUID) and persists it in browser storage; expose the current guest session id to callers."
         },
         {
-          "path": "frontend/src/components/chat/PuroAvatar.tsx",
+          "path": "frontend/src/utils/guestSession.ts",
+          "operation": "create",
+          "description": "Add utility helpers for generating/loading the guest session id (including a safe UUID fallback) and a single source of truth for the storage key used."
+        }
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "summary": "Update React Query hooks to pass the correct session identifier for chat/profile calls (guest session id when anonymous) and keep UI flows working in guest mode.",
+      "acceptanceCriteria": [
+        "Chat history loads in guest mode without errors.",
+        "Sending a message in guest mode succeeds and the transcript updates as expected.",
+        "Profile setup modal can save the name in guest mode and then allows entry into the chat.",
+        "No runtime errors occur due to backend signature changes (frontend stays in sync with the updated canister API)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Update the avatar image reference to use frontend/public/assets/generated/puro-avatar-changed.dim_512x512.png while keeping the existing size variants (sm/md/lg/xl), circular crop, and alt text exactly \"Puro\"."
+          "description": "Update profile and chat React Query hooks to include a session id/session key argument on all relevant actor calls; when identity is absent, derive these values from the persisted guest session id (and keep query keys scoped by the effective session key to avoid cross-session cache mixing)."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Adjust profile-setup gating logic to work for guest mode (no dependency on being authenticated), ensuring the modal shows only after the profile query is fetched and indicates no profile."
         }
       ]
     }

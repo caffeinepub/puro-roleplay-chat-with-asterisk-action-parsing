@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-puro-avatar-image-to-visually-match-puro-from-changed-by-dragonsnow-and-update-the-frontend-to-use-the-updated-avatar-asset",
-      "featureTitle": "Update the Puro avatar image to visually match Puro from “Changed” by DragonSnow, and update the frontend to use the updated avatar asset.",
+      "featureId": "feature-update-the-app-so-users-can-access-the-chat-without-internet-identity-login-no-authentication-gate-the-chat-experience-should-work-in-guest-mode-by-default",
+      "featureTitle": "Update the app so users can access the chat without Internet Identity login (no authentication gate). The chat experience should work in “guest mode” by default.",
       "files": [
-        "frontend/src/components/chat/PuroAvatar.tsx"
+        "frontend/src/App.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -16,7 +16,66 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-10"
+        "REQ-11"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-remove-the-internet-identity-login-logout-ui-from-the-chat-layout-so-the-header-no-longer-displays-a-login-logout-button",
+      "featureTitle": "Remove the Internet Identity login/logout UI from the chat layout so the header no longer displays a Login/Logout button.",
+      "files": [
+        "frontend/src/components/layout/ChatLayout.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-12"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-per-browser-guest-session-id-to-keep-chat-history-and-profile-data-separate-between-different-anonymous-users-and-use-it-for-all-chat-profile-calls-when-the-caller-is-anonymous",
+      "featureTitle": "Add a per-browser “guest session id” to keep chat history and profile data separate between different anonymous users, and use it for all chat/profile calls when the caller is anonymous.",
+      "files": [
+        "frontend/src/hooks/useGuestSessionId.ts",
+        "frontend/src/utils/guestSession.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-13"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-frontend-react-query-hooks-and-backend-interface-usage-so-all-necessary-calls-include-the-guest-session-id-when-running-anonymously-and-continue-to-work-without-code-changes-from-the-user",
+      "featureTitle": "Update the frontend React Query hooks and backend interface usage so all necessary calls include the guest session id when running anonymously, and continue to work without code changes from the user.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-15"
       ],
       "confidence": "high"
     }

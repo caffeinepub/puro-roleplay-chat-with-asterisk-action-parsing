@@ -115,13 +115,13 @@ export enum Variant_action_dialogue {
 export interface backendInterface {
     _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
-    getCallerUserProfile(): Promise<UserProfile | null>;
+    getCallerUserProfile(sessionId: string): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
-    getHistory(): Promise<Array<ChatMessage>>;
-    getUserProfile(user: Principal): Promise<UserProfile | null>;
+    getHistory(sessionKey: string): Promise<Array<ChatMessage>>;
+    getUserProfile(user: string): Promise<UserProfile | null>;
     isCallerAdmin(): Promise<boolean>;
-    saveCallerUserProfile(profile: UserProfile): Promise<void>;
-    sendMessage(message: ChatMessage): Promise<ChatMessage>;
+    saveCallerUserProfile(sessionId: string, profile: UserProfile): Promise<void>;
+    sendMessage(sessionKey: string, message: ChatMessage): Promise<ChatMessage>;
 }
 import type { ChatMessage as _ChatMessage, Time as _Time, UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
@@ -154,17 +154,17 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async getCallerUserProfile(): Promise<UserProfile | null> {
+    async getCallerUserProfile(arg0: string): Promise<UserProfile | null> {
         if (this.processError) {
             try {
-                const result = await this.actor.getCallerUserProfile();
+                const result = await this.actor.getCallerUserProfile(arg0);
                 return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.getCallerUserProfile();
+            const result = await this.actor.getCallerUserProfile(arg0);
             return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
         }
     }
@@ -182,21 +182,21 @@ export class Backend implements backendInterface {
             return from_candid_UserRole_n4(this._uploadFile, this._downloadFile, result);
         }
     }
-    async getHistory(): Promise<Array<ChatMessage>> {
+    async getHistory(arg0: string): Promise<Array<ChatMessage>> {
         if (this.processError) {
             try {
-                const result = await this.actor.getHistory();
+                const result = await this.actor.getHistory(arg0);
                 return from_candid_vec_n6(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.getHistory();
+            const result = await this.actor.getHistory(arg0);
             return from_candid_vec_n6(this._uploadFile, this._downloadFile, result);
         }
     }
-    async getUserProfile(arg0: Principal): Promise<UserProfile | null> {
+    async getUserProfile(arg0: string): Promise<UserProfile | null> {
         if (this.processError) {
             try {
                 const result = await this.actor.getUserProfile(arg0);
@@ -224,31 +224,31 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async saveCallerUserProfile(arg0: UserProfile): Promise<void> {
+    async saveCallerUserProfile(arg0: string, arg1: UserProfile): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.saveCallerUserProfile(arg0);
+                const result = await this.actor.saveCallerUserProfile(arg0, arg1);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.saveCallerUserProfile(arg0);
+            const result = await this.actor.saveCallerUserProfile(arg0, arg1);
             return result;
         }
     }
-    async sendMessage(arg0: ChatMessage): Promise<ChatMessage> {
+    async sendMessage(arg0: string, arg1: ChatMessage): Promise<ChatMessage> {
         if (this.processError) {
             try {
-                const result = await this.actor.sendMessage(to_candid_ChatMessage_n11(this._uploadFile, this._downloadFile, arg0));
+                const result = await this.actor.sendMessage(arg0, to_candid_ChatMessage_n11(this._uploadFile, this._downloadFile, arg1));
                 return from_candid_ChatMessage_n7(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.sendMessage(to_candid_ChatMessage_n11(this._uploadFile, this._downloadFile, arg0));
+            const result = await this.actor.sendMessage(arg0, to_candid_ChatMessage_n11(this._uploadFile, this._downloadFile, arg1));
             return from_candid_ChatMessage_n7(this._uploadFile, this._downloadFile, result);
         }
     }

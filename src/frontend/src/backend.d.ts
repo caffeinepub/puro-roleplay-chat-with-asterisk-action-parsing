@@ -32,11 +32,11 @@ export enum Variant_action_dialogue {
 }
 export interface backendInterface {
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
-    getCallerUserProfile(): Promise<UserProfile | null>;
+    getCallerUserProfile(sessionId: string): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
-    getHistory(): Promise<Array<ChatMessage>>;
-    getUserProfile(user: Principal): Promise<UserProfile | null>;
+    getHistory(sessionKey: string): Promise<Array<ChatMessage>>;
+    getUserProfile(user: string): Promise<UserProfile | null>;
     isCallerAdmin(): Promise<boolean>;
-    saveCallerUserProfile(profile: UserProfile): Promise<void>;
-    sendMessage(message: ChatMessage): Promise<ChatMessage>;
+    saveCallerUserProfile(sessionId: string, profile: UserProfile): Promise<void>;
+    sendMessage(sessionKey: string, message: ChatMessage): Promise<ChatMessage>;
 }

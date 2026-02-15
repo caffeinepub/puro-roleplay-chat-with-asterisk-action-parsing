@@ -1,38 +1,73 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-15T00:56:10.172Z",
+  "generatedAt": "2026-02-15T01:01:56.831Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 1,
+    "total": 6,
+    "implemented": 4,
     "items": [
       {
-        "id": "REQ-10",
-        "summary": "Update the Puro avatar image to visually match Puro from “Changed” by DragonSnow, and update the frontend to use the updated avatar asset.",
+        "id": "REQ-11",
+        "summary": "Update the app so users can access the chat without Internet Identity login (no authentication gate). The chat experience should work in “guest mode” by default.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/public/assets/generated/puro-avatar-changed.dim_512x512.png",
-          "frontend/src/components/chat/PuroAvatar.tsx"
+          "frontend/src/App.tsx"
         ],
         "matchedFiles": [
-          "frontend/public/assets/generated/puro-avatar-changed.dim_512x512.png",
-          "frontend/src/components/chat/PuroAvatar.tsx"
+          "frontend/src/App.tsx"
         ]
       },
       {
-        "id": "REQ-8",
-        "summary": "Update the backend Puro response generator so Puro’s replies consistently roleplay as Puro from the game “Changed” by DragonSnow (voice, mannerisms, characterization) instead of echoing the user message or using generic phrasing.",
+        "id": "REQ-12",
+        "summary": "Remove the Internet Identity login/logout UI from the chat layout so the header no longer displays a Login/Logout button.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/layout/ChatLayout.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/layout/ChatLayout.tsx"
+        ]
+      },
+      {
+        "id": "REQ-13",
+        "summary": "Add a per-browser “guest session id” to keep chat history and profile data separate between different anonymous users, and use it for all chat/profile calls when the caller is anonymous.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useGuestSessionId.ts",
+          "frontend/src/utils/guestSession.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useGuestSessionId.ts",
+          "frontend/src/utils/guestSession.ts"
+        ]
+      },
+      {
+        "id": "REQ-14",
+        "summary": "Modify backend authorization behavior so guest users (anonymous callers) can use the chat and profile features without needing access control initialization, while preserving existing behavior for authenticated principals.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
-        "id": "REQ-9",
-        "summary": "Improve backend handling of action messages (messages entered by the user ending with “*”) so Puro responds in-character to the described action and does not use immersion-breaking language (e.g., avoid implying the action is “part of your imagination”).",
+        "id": "REQ-15",
+        "summary": "Update the frontend React Query hooks and backend interface usage so all necessary calls include the guest session id when running anonymously, and continue to work without code changes from the user.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-16",
+        "summary": "If changing backend stable data structures is required to support guest session keys alongside principals, add an upgrade-safe state migration that preserves existing authenticated users’ chat histories and profiles.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
@@ -41,13 +76,20 @@
   },
   "changedFiles": [
     "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
-    "build-template/README.md",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/public/assets/generated/puro-avatar-changed.dim_512x512.png",
-    "frontend/src/components/chat/PuroAvatar.tsx",
+    "frontend/src/App.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/layout/ChatLayout.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useGuestSessionId.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/utils/guestSession.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

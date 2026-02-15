@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import LoginButton from '../auth/LoginButton';
 import PuroAvatar from '../chat/PuroAvatar';
 import { SiFacebook, SiX } from 'react-icons/si';
 
@@ -23,7 +22,6 @@ export default function ChatLayout({ children }: ChatLayoutProps) {
               <p className="text-xs text-muted-foreground">Your friendly companion</p>
             </div>
           </div>
-          <LoginButton />
         </div>
       </header>
 

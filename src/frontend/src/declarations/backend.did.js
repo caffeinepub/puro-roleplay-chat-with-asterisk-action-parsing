@@ -25,17 +25,17 @@ export const ChatMessage = IDL.Record({
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-  'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
-  'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-  'getHistory' : IDL.Func([], [IDL.Vec(ChatMessage)], ['query']),
-  'getUserProfile' : IDL.Func(
-      [IDL.Principal],
+  'getCallerUserProfile' : IDL.Func(
+      [IDL.Text],
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
+  'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getHistory' : IDL.Func([IDL.Text], [IDL.Vec(ChatMessage)], ['query']),
+  'getUserProfile' : IDL.Func([IDL.Text], [IDL.Opt(UserProfile)], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
-  'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
-  'sendMessage' : IDL.Func([ChatMessage], [ChatMessage], []),
+  'saveCallerUserProfile' : IDL.Func([IDL.Text, UserProfile], [], []),
+  'sendMessage' : IDL.Func([IDL.Text, ChatMessage], [ChatMessage], []),
 });
 
 export const idlInitArgs = [];
@@ -58,17 +58,17 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-    'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
-    'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-    'getHistory' : IDL.Func([], [IDL.Vec(ChatMessage)], ['query']),
-    'getUserProfile' : IDL.Func(
-        [IDL.Principal],
+    'getCallerUserProfile' : IDL.Func(
+        [IDL.Text],
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
+    'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getHistory' : IDL.Func([IDL.Text], [IDL.Vec(ChatMessage)], ['query']),
+    'getUserProfile' : IDL.Func([IDL.Text], [IDL.Opt(UserProfile)], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
-    'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
-    'sendMessage' : IDL.Func([ChatMessage], [ChatMessage], []),
+    'saveCallerUserProfile' : IDL.Func([IDL.Text, UserProfile], [], []),
+    'sendMessage' : IDL.Func([IDL.Text, ChatMessage], [ChatMessage], []),
   });
 };
 

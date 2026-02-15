@@ -26,13 +26,13 @@ export type UserRole = { 'admin' : null } |
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
-  'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
+  'getCallerUserProfile' : ActorMethod<[string], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
-  'getHistory' : ActorMethod<[], Array<ChatMessage>>,
-  'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'getHistory' : ActorMethod<[string], Array<ChatMessage>>,
+  'getUserProfile' : ActorMethod<[string], [] | [UserProfile]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
-  'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
-  'sendMessage' : ActorMethod<[ChatMessage], ChatMessage>,
+  'saveCallerUserProfile' : ActorMethod<[string, UserProfile], undefined>,
+  'sendMessage' : ActorMethod<[string, ChatMessage], ChatMessage>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

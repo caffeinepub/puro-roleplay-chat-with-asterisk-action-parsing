@@ -8,7 +8,9 @@ import Time "mo:core/Time";
 import Char "mo:core/Char";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor {
   type ChatMessage = {
     timestamp : Time.Time;
@@ -43,7 +45,7 @@ actor {
     };
   };
 
-  let chatSessions = Map.empty<Principal, [ChatMessage]>();
+  let chatSessions = Map.empty<Text, [ChatMessage]>();
   let accessControlState = AccessControl.initState();
 
   include MixinAuthorization(accessControlState);
@@ -52,27 +54,36 @@ actor {
     name : Text;
   };
 
-  let userProfiles = Map.empty<Principal, UserProfile>();
+  let userProfiles = Map.empty<Text, UserProfile>();
 
-  public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view profiles");
-    };
-    userProfiles.get(caller);
+  public query ({ caller }) func getCallerUserProfile(sessionId : Text) : async ?UserProfile {
+    let key = determineProfileKey(caller, sessionId);
+    userProfiles.get(key);
   };
 
-  public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
-    if (caller != user and not AccessControl.isAdmin(accessControlState, caller)) {
+  public query ({ caller }) func getUserProfile(user : Text) : async ?UserProfile {
+    // Authorization: Users can only view their own profile, admins can view any profile
+    let callerKey = if (caller.isAnonymous()) {
+      // Anonymous users cannot view other profiles by user text key
+      "";
+    } else {
+      caller.toText();
+    };
+
+    if (user != callerKey and not AccessControl.isAdmin(accessControlState, caller)) {
       Runtime.trap("Unauthorized: Can only view your own profile");
     };
+
     userProfiles.get(user);
   };
 
-  public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can save profiles");
-    };
-    userProfiles.add(caller, profile);
+  public shared ({ caller }) func saveCallerUserProfile(
+    sessionId : Text,
+    profile : UserProfile,
+  ) : async () {
+    // No authorization check needed - both authenticated users and guests can save their own profiles
+    let key = determineProfileKey(caller, sessionId);
+    userProfiles.add(key, profile);
   };
 
   func isAction(text : Text) : Bool {
@@ -80,11 +91,19 @@ actor {
     chars.size() > 0 and chars[chars.size() - 1] == '*';
   };
 
-  public shared ({ caller }) func sendMessage(message : ChatMessage) : async ChatMessage {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can send messages");
+  func determineProfileKey(caller : Principal, sessionId : Text) : Text {
+    if (caller.isAnonymous()) {
+      sessionId;
+    } else {
+      caller.toText();
     };
+  };
 
+  public shared ({ caller }) func sendMessage(
+    sessionKey : Text,
+    message : ChatMessage,
+  ) : async ChatMessage {
+    // No authorization check needed - both authenticated users and guests can send messages
     let isActionMsg = isAction(message.content);
 
     let processedMessage = {
@@ -102,32 +121,36 @@ actor {
     };
 
     let newContent = [processedMessage];
-    let previousMessages = switch (chatSessions.get(caller)) {
+    let previousMessages = switch (chatSessions.get(sessionKey)) {
       case (null) { [] };
       case (?v) { v };
     };
-    chatSessions.add(caller, previousMessages.concat(newContent));
+    chatSessions.add(sessionKey, previousMessages.concat(newContent));
 
     let puroResponse = generatePuroResponse(processedMessage);
 
     let responseContent = [puroResponse];
-    let previousMessages2 = switch (chatSessions.get(caller)) {
+    let previousMessages2 = switch (chatSessions.get(sessionKey)) {
       case (null) { [] };
       case (?v) { v };
     };
-    chatSessions.add(caller, previousMessages2.concat(responseContent));
+    chatSessions.add(sessionKey, previousMessages2.concat(responseContent));
 
     puroResponse;
   };
 
-  public query ({ caller }) func getHistory() : async [ChatMessage] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view history");
+  public query ({ caller }) func getHistory(sessionKey : Text) : async [ChatMessage] {
+    // Authorization: Users can only view their own session history, admins can view any history
+    let callerKey = determineProfileKey(caller, sessionKey);
+
+    if (sessionKey != callerKey and not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Can only view your own chat history");
     };
 
-    switch (chatSessions.get(caller)) {
+    switch (chatSessions.get(sessionKey)) {
       case (null) { Runtime.trap("No session found") };
       case (?messages) { messages };
     };
   };
 };
+

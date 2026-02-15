@@ -1,87 +1,129 @@
 {
   "kind": "build_request",
-  "title": "Align Puro persona and avatar with Puro from Changed (DragonSnow)",
+  "title": "Remove Internet Identity requirement and enable guest chat sessions",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-8",
-      "text": "Update the backend Puro response generator so Puro’s replies consistently roleplay as Puro from the game “Changed” by DragonSnow (voice, mannerisms, characterization) instead of echoing the user message or using generic phrasing.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-6"
-        ],
-        "quotes": [
-          "Make the puro... Puro from changed by dragonsnow"
-        ]
-      },
-      "acceptanceCriteria": [
-        "When the user sends a normal dialogue message, the returned Puro message is not a verbatim echo of the user’s content.",
-        "Puro responses are short, in-character, and consistently written from Puro’s perspective (not as a system narrator).",
-        "Puro’s tone matches a friendly, curious lab-creature companion consistent with “Changed” characterization, without referencing external AI/system behavior."
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "text": "Improve backend handling of action messages (messages entered by the user ending with “*”) so Puro responds in-character to the described action and does not use immersion-breaking language (e.g., avoid implying the action is “part of your imagination”).",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-6"
-        ],
-        "quotes": [
-          "Make the puro... Puro from changed by dragonsnow"
-        ]
-      },
-      "acceptanceCriteria": [
-        "When the user sends an action message (e.g., \"waves*\"), the stored user message has messageType=action and has the trailing asterisk removed from content (existing behavior preserved).",
-        "Puro’s response acknowledges/reacts to the action in-character and remains messageType=dialogue.",
-        "Puro’s action responses do not contain immersion-breaking phrases like “part of your imagination” or similar disclaimers."
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "text": "Update the Puro avatar image to visually match Puro from “Changed” by DragonSnow, and update the frontend to use the updated avatar asset.",
+      "id": "REQ-11",
+      "text": "Update the app so users can access the chat without Internet Identity login (no authentication gate). The chat experience should work in “guest mode” by default.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-4"
         ],
         "quotes": [
-          "Make the puro... Puro from changed by dragonsnow"
+          "Make it skip internet identity"
         ]
       },
       "acceptanceCriteria": [
-        "A new or updated Puro avatar image asset exists under frontend/public/assets/generated.",
-        "The PuroAvatar component displays the updated asset and still renders correctly at all supported sizes (sm/md/lg/xl).",
-        "No user-facing text references anything other than “Puro” (English only)."
+        "Opening the app takes the user directly to the chat experience without requiring a login step.",
+        "No login screen is shown anywhere in the normal user flow.",
+        "All user-facing text related to logging in is removed or replaced with guest-friendly wording."
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "text": "Remove the Internet Identity login/logout UI from the chat layout so the header no longer displays a Login/Logout button.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Make it skip internet identity"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The chat header does not render the LoginButton component.",
+        "The app header still shows Puro branding/avatar as before.",
+        "No “Login”, “Logout”, or “Logging in...” text is visible in the UI."
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "text": "Add a per-browser “guest session id” to keep chat history and profile data separate between different anonymous users, and use it for all chat/profile calls when the caller is anonymous.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Make it skip internet identity"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Frontend generates and persists a stable guest session id in browser storage (survives refresh).",
+        "Backend stores and retrieves chat history based on this guest session id for anonymous callers (so different browsers/devices do not share one anonymous chat history).",
+        "Saving and fetching the user profile works in guest mode using the same guest session id."
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "text": "Modify backend authorization behavior so guest users (anonymous callers) can use the chat and profile features without needing access control initialization, while preserving existing behavior for authenticated principals.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Make it skip internet identity"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Anonymous callers can call the chat and profile APIs successfully (no “Unauthorized: Only users...” traps for guest flows).",
+        "Authenticated callers still follow the existing permission checks (no regression for non-anonymous principals)."
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "text": "Update the frontend React Query hooks and backend interface usage so all necessary calls include the guest session id when running anonymously, and continue to work without code changes from the user.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Make it skip internet identity"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Chat history loads in guest mode without errors.",
+        "Sending a message in guest mode succeeds and the transcript updates as expected.",
+        "Profile setup modal can save the name in guest mode and then allows entry into the chat.",
+        "No runtime errors occur due to backend signature changes (frontend stays in sync with the updated canister API)."
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "text": "If changing backend stable data structures is required to support guest session keys alongside principals, add an upgrade-safe state migration that preserves existing authenticated users’ chat histories and profiles.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Make it skip internet identity"
+        ]
+      },
+      "acceptanceCriteria": [
+        "After an upgrade, existing principal-based chat histories and profiles remain accessible for authenticated users.",
+        "Migration runs only when needed and does not corrupt or erase existing state.",
+        "Guest session data is stored separately from principal-based data."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor in backend/main.mo; do not introduce additional backend services.",
-    "Do not modify any files under frontend/src/components/ui or any paths listed in SYSTEM_CONTEXT.frontend.immutablePaths.",
-    "Store and reference static images from frontend/public/assets/generated (do not serve images from the backend)."
+    "Do not edit read-only frontend paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
+    "Backend must remain a single Motoko actor in backend/main.mo; only add backend/migration.mo if state migration is needed.",
+    "Use English for all user-facing text."
   ],
   "nonGoals": [
-    "Adding third-party/hosted AI model integrations for responses.",
-    "Changing authentication (Internet Identity) behavior.",
-    "Adding real-time messaging (WebSockets) or multi-user chat rooms."
+    "Implementing third-party authentication providers (only Internet Identity exists, but this change is to avoid requiring it).",
+    "Adding real-time messaging (WebSockets) or external databases.",
+    "Redesigning the chat UI beyond removing the login gate and login/logout affordances."
   ],
   "imageRequirements": {
     "required": [],
-    "edits": [
-      "Make the existing Puro avatar look like Puro from the game Changed: anthropomorphic wolf/dog-like creature, black/dark fur with white facial markings, expressive friendly eyes, subtle sci‑fi lab vibe, clean background (puro-avatar.dim_512x512.png > puro-avatar-changed.dim_512x512.png)"
-    ]
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
+    "edits": []
   }
 }

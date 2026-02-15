@@ -1,11 +1,10 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 5,
+  "projectStateVersion": 7,
   "summary": "AI chat app to roleplay chatting with Puro specifically as depicted in the game “Changed” by DragonSnow, treating user inputs marked with an asterisk as action/roleplay cues.",
   "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
-  "imageRequirements": "## Edit Images\n- Make the existing Puro avatar look like Puro from the game Changed: anthropomorphic wolf/dog-like creature, black/dark fur with white facial markings, expressive friendly eyes, subtle sci‑fi lab vibe, clean background (puro-avatar.dim_512x512.png > puro-avatar-changed.dim_512x512.png)",
   "existing_features": [
     {
       "id": "feature-implement-a-chat-experience-where-the-assistant-roleplays-as-the-character-puro-maintaining-a-consistent-in-character-voice-across-messages-and-responding-to-the-user-s-inputs-with-short-conversational-replies",
@@ -52,6 +51,38 @@
       "title": "Update the Puro avatar image to visually match Puro from “Changed” by DragonSnow, and update the frontend to use the updated avatar asset.",
       "reqIds": [
         "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-app-so-users-can-access-the-chat-without-internet-identity-login-no-authentication-gate-the-chat-experience-should-work-in-guest-mode-by-default",
+      "title": "Update the app so users can access the chat without Internet Identity login (no authentication gate). The chat experience should work in “guest mode” by default.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-internet-identity-login-logout-ui-from-the-chat-layout-so-the-header-no-longer-displays-a-login-logout-button",
+      "title": "Remove the Internet Identity login/logout UI from the chat layout so the header no longer displays a Login/Logout button.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-per-browser-guest-session-id-to-keep-chat-history-and-profile-data-separate-between-different-anonymous-users-and-use-it-for-all-chat-profile-calls-when-the-caller-is-anonymous",
+      "title": "Add a per-browser “guest session id” to keep chat history and profile data separate between different anonymous users, and use it for all chat/profile calls when the caller is anonymous.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-frontend-react-query-hooks-and-backend-interface-usage-so-all-necessary-calls-include-the-guest-session-id-when-running-anonymously-and-continue-to-work-without-code-changes-from-the-user",
+      "title": "Update the frontend React Query hooks and backend interface usage so all necessary calls include the guest session id when running anonymously, and continue to work without code changes from the user.",
+      "reqIds": [
+        "REQ-15"
       ],
       "version": 1
     }
@@ -104,6 +135,28 @@
       "summary": "Improve backend handling of action messages (messages entered by the user ending with “*”) so Puro responds in-character to the described action and does not use immersion-breaking language (e.g., avoid implying the action is “part of your imagination”).",
       "reqIds": [
         "REQ-9"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Adjust Puro’s roleplay behavior to avoid mentioning or referencing an 'internet identity' (keep responses in-universe and immersion-preserving).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Modify backend authorization behavior so guest users (anonymous callers) can use the chat and profile features without needing access control initialization, while preserving existing behavior for authenticated principals.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "If changing backend stable data structures is required to support guest session keys alongside principals, add an upgrade-safe state migration that preserves existing authenticated users’ chat histories and profiles.",
+      "reqIds": [
+        "REQ-16"
       ],
       "status": "pending"
     }

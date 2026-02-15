@@ -1,55 +1,37 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-15T00:56:10.169Z",
-  "summary": "Backend changes do not meet the in-character response requirements: dialogue replies still echo the user input, and action replies include immersion-breaking disclaimers. Frontend was updated to reference a new avatar filename, but the diff summary provides no evidence that the new image asset was actually added under the required public assets path.",
+  "generatedAt": "2026-02-15T01:01:56.828Z",
+  "summary": "Implemented guest-mode session IDs on the frontend, updated React Query hooks to pass a session key for anonymous users, updated backend storage to key chats/profiles by Text (session key) and added a migration module. Removed login/logout UI from the chat layout header. However, backend auth behavior for authenticated principals appears changed (authorization checks removed broadly), and some additional UI/footer content was added that was not requested.",
   "missing_requirements": [
     {
-      "id": "REQ-8",
-      "requirement": "Update the backend Puro response generator so Puro’s replies consistently roleplay as Puro from the game “Changed” (voice/characterization) and do not echo the user message.",
-      "reason": "For dialogue messages, the response content is constructed by appending \" (tail wags)\" to the user’s text, which is effectively a verbatim echo of the user content rather than a distinct in-character reply.",
+      "id": "REQ-14",
+      "requirement": "Preserve existing permission checks/authorization behavior for authenticated principals while allowing anonymous (guest) callers to use chat/profile without traps.",
+      "reason": "The diff explicitly removes authorization checks for both guests and authenticated users on key mutating endpoints (e.g., sendMessage, saveCallerUserProfile), which risks a regression versus the requirement to preserve existing authenticated behavior.",
       "evidence": [
-        "backend/main.mo"
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "requirement": "Improve backend handling of action messages so Puro responds in-character to the action without immersion-breaking language/disclaimers.",
-      "reason": "The action response includes an explicit disclaimer about actions being only because the user said so in the message (\"that`s because you said so in your message\"), which is immersion-breaking and directly contradicts the requirement to avoid such disclaimers (e.g., 'part of your imagination' style).",
-      "evidence": [
-        "backend/main.mo"
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "requirement": "Add a new/updated Puro avatar image asset under frontend/public/assets/generated and update the frontend to use it.",
-      "reason": "The frontend component now references \"/assets/generated/puro-avatar-changed.dim_512x512.png\", but the diff summary shows no added/modified file under frontend/public/assets/generated to prove the asset exists in the required location.",
-      "evidence": [
-        "frontend/src/components/chat/PuroAvatar.tsx"
+        "backend/main.mo (comments: \"No authorization check needed - both authenticated users and guests can send messages\" and \"No authorization check needed - both authenticated users and guests can save their own profiles\")"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Updated/added project metadata/state summary not requested by the BuildRequest.",
-      "reason": "The BuildRequest focuses on backend response behavior and the avatar asset/component usage; it does not request modifications to project_state.json.",
+      "description": "Added/changed footer content including \"Built with ❤️ using caffeine.ai\" attribution and social share icons/links in the chat layout.",
+      "reason": "The BuildRequest explicitly lists UI redesign beyond removing login gate/affordances as a non-goal; the diff shows new footer text, emoji, and share icons which are not part of the requested changes.",
       "evidence": [
-        "project_state.json"
-      ]
-    },
-    {
-      "description": "Updated/added a frontend file summaries listing not requested by the BuildRequest.",
-      "reason": "The BuildRequest does not ask to generate or modify frontend-file-summaries.txt.",
-      "evidence": [
-        "frontend-file-summaries.txt"
+        "frontend/src/components/layout/ChatLayout.tsx"
       ]
     }
   ],
-  "confidence": 0.74,
+  "confidence": 0.62,
   "changed_files": [
     "backend/main.mo",
+    "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/components/chat/PuroAvatar.tsx",
+    "frontend/src/App.tsx",
+    "frontend/src/components/layout/ChatLayout.tsx",
+    "frontend/src/hooks/useGuestSessionId.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/utils/guestSession.ts",
     "project_state.json"
   ]
 }
