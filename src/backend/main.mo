@@ -9,8 +9,6 @@ import Char "mo:core/Char";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 
-
-
 actor {
   type ChatMessage = {
     timestamp : Time.Time;
@@ -22,24 +20,6 @@ actor {
     messageType : {
       #action;
       #dialogue;
-    };
-  };
-
-  func neutralResponse(text : Text, messageType : { #action : () ; #dialogue : () }) : Text {
-    switch (messageType) {
-      case (#action) {
-        "Thank you for the message. You mentioned an action: " # text # ". I'm here to respond to your input and have a conversation with you.";
-      };
-      case (#dialogue) { text };
-    };
-  };
-
-  func generateNeutralResponse(userMessage : ChatMessage) : ChatMessage {
-    {
-      timestamp = Time.now();
-      content = neutralResponse(userMessage.content, userMessage.messageType);
-      sender = #Puro;
-      messageType = #dialogue;
     };
   };
 
@@ -73,10 +53,7 @@ actor {
     userProfiles.get(user);
   };
 
-  public shared ({ caller }) func saveCallerUserProfile(
-    sessionId : Text,
-    profile : UserProfile,
-  ) : async () {
+  public shared ({ caller }) func saveCallerUserProfile(sessionId : Text, profile : UserProfile) : async () {
     // No authorization check needed - both authenticated users and guests can save their own profiles
     let key = determineProfileKey(caller, sessionId);
     userProfiles.add(key, profile);
@@ -95,13 +72,44 @@ actor {
     };
   };
 
-  public shared ({ caller }) func sendMessage(
-    sessionKey : Text,
-    message : ChatMessage,
-  ) : async ChatMessage {
+  func isEscapeAttempt(content : Text) : Bool {
+    let lowercaseContent = content.toLower();
+    lowercaseContent.contains(#text "run") or
+    lowercaseContent.contains(#text "escape") or
+    lowercaseContent.contains(#text "flee") or
+    lowercaseContent.contains(#text "leave") or
+    lowercaseContent.contains(#text "get away") or
+    lowercaseContent.contains(#text "go away");
+  };
+
+  func generatePuroResponse(userMessage : ChatMessage) : ChatMessage {
+    let isEscape = isEscapeAttempt(userMessage.content);
+
+    let (content, messageType) = if (isEscape) {
+      (
+        "*Puro quickly moves to block your path, his dark latex form shifting smoothly* Wait! Where are you going? It's dangerous out there alone. *He tilts his head with concern* Please, stay a little longer. I promise I'll keep you safe here.",
+        #action,
+      );
+    } else {
+      // Default in-character response (not echo)
+      (
+        "Puro tilts his head, his latex mask reflecting the light. *Let me know if you need help or want to talk about books. I'm always here*",
+        #dialogue,
+      );
+    };
+
+    {
+      timestamp = Time.now();
+      content;
+      sender = #Puro;
+      messageType;
+    };
+  };
+
+  public shared ({ caller }) func sendMessage(sessionKey : Text, message : ChatMessage) : async ChatMessage {
     // Authorization: Users can only send messages to their own session, admins can send to any session
     let callerKey = determineProfileKey(caller, sessionKey);
-    
+
     if (sessionKey != callerKey and not AccessControl.isAdmin(accessControlState, caller)) {
       Runtime.trap("Unauthorized: Can only send messages to your own session");
     };
@@ -129,16 +137,16 @@ actor {
     };
     chatSessions.add(sessionKey, previousMessages.concat(newContent));
 
-    let neutralResponse = generateNeutralResponse(processedMessage);
+    let roleplayingResponse = generatePuroResponse(processedMessage);
 
-    let responseContent = [neutralResponse];
+    let responseContent = [roleplayingResponse];
     let previousMessages2 = switch (chatSessions.get(sessionKey)) {
       case (null) { [] };
       case (?v) { v };
     };
     chatSessions.add(sessionKey, previousMessages2.concat(responseContent));
 
-    neutralResponse;
+    roleplayingResponse;
   };
 
   public query ({ caller }) func getHistory(sessionKey : Text) : async [ChatMessage] {

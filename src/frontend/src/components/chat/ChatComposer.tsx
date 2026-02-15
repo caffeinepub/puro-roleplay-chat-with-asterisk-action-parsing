@@ -43,7 +43,7 @@ export default function ChatComposer({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type a message... (use * at the end for actions)"
+          placeholder="Talk to Puro or describe what you do... (end with * for actions)"
           disabled={disabled}
           className="min-h-[60px] max-h-[200px] resize-none pr-12"
           rows={2}

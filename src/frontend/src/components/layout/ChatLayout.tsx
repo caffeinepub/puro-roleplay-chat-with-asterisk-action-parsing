@@ -19,7 +19,7 @@ export default function ChatLayout({ children }: ChatLayoutProps) {
             <PuroAvatar size="sm" />
             <div>
               <h1 className="text-lg font-bold text-foreground">Puro</h1>
-              <p className="text-xs text-muted-foreground">Chat assistant</p>
+              <p className="text-xs text-muted-foreground">Your latex wolf companion</p>
             </div>
           </div>
         </div>

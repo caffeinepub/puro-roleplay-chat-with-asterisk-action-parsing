@@ -1,8 +1,12 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 9,
-  "summary": "AI chat app where the assistant does not strongly roleplay as Puro; user inputs marked with an asterisk are still treated as action/roleplay cues.",
-  "architectural_notes": [],
+  "projectStateVersion": 15,
+  "summary": "AI roleplay chat app where the assistant roleplays as Puro and treats the roleplay scenario as genuinely happening (no meta/imaginary framing), while still supporting asterisk-marked user action messages.",
+  "architectural_notes": [
+    "Roleplay mode should be fully in-universe: Puro treats user actions/events as реально happening and avoids meta framing (e.g., no “in your imagination”/out-of-character explanations), including for “*” action messages.",
+    "Puro characterization: kind, often reads books; appearance described as a black wolf with puffy fur and a hard mask.",
+    "Puro should consistently prevent the user from running away/escaping (in-character), rather than allowing escape."
+  ],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
@@ -93,6 +97,14 @@
         "REQ-18"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-user-facing-frontend-copy-to-match-an-in-universe-roleplay-chat-experience-with-puro-remove-chat-assistant-positioning-while-keeping-the-existing-hint-that-users-can-end-a-message-with-to-describe-actions",
+      "title": "Update user-facing frontend copy to match an in-universe roleplay chat experience with Puro (remove \"Chat assistant\" positioning), while keeping the existing hint that users can end a message with \"*\" to describe actions.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -179,6 +191,58 @@
       "summary": "Update the backend response generator so the assistant no longer strongly roleplays as Puro, producing neutral, helpful conversational replies instead of in-character mannerisms (e.g., remove roleplay stage directions like \"(tail wags)\" and immersion/roleplay framing like \"Puro sees you ...\"). Action messages (user text ending with \"*\") must still be recognized and handled, but the response should acknowledge the described action in a neutral way.",
       "reqIds": [
         "REQ-17"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Update the chat experience so the assistant roleplays as Puro and responds as if the roleplay events/actions are really happening (fully in-universe, no meta/imagination framing), while continuing to recognize and respond to user action messages marked with “*”.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Update the backend response generator so Puro roleplays as if the events in the conversation are genuinely happening (fully in-universe), rather than responding with neutral assistant-style phrasing or echoing the user message.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Ensure backend handling of asterisk-marked user actions remains supported, and update Puro’s action responses to treat the described action as something that is actually happening in the shared scene (no meta framing).",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Adjust Puro’s roleplay behavior so that when the user attempts to run away (e.g., \"run\"/\"I run\"/\"runs*\"), Puro tries to stop/prevent it in-character (e.g., blocks, chases, persuades), maintaining fully in-universe immersion.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Update the backend Puro response logic so that when the user attempts to run away/escape (in either dialogue or an asterisk-marked action), Puro responds in-character by trying to stop/prevent the escape (e.g., blocking the path, catching up, persuading), staying fully in-universe and not echoing the user’s message verbatim.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Update the backend deterministic response generator so Puro’s general (non-escape) replies are consistently in-character as a kind, book-reading black wolf with puffy fur and a hard mask, instead of echoing the user’s message.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Update the backend escape-attempt handling so that when the user tries to run/escape (in dialogue or action), Puro responds in-character by preventing the escape while matching the provided persona details (black wolf, puffy fur, hard mask, kind but firm). Remove contradictory descriptors in the current escape response.",
+      "reqIds": [
+        "REQ-24"
       ],
       "status": "pending"
     }

@@ -1,54 +1,53 @@
 {
   "kind": "build_request",
-  "title": "Reduce Puro roleplay and shift assistant responses to a neutral chat style",
+  "title": "Refine Puro persona: kind bookish black wolf with mask who prevents escape",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-17",
-      "text": "Update the backend response generator so the assistant no longer strongly roleplays as Puro, producing neutral, helpful conversational replies instead of in-character mannerisms (e.g., remove roleplay stage directions like \"(tail wags)\" and immersion/roleplay framing like \"Puro sees you ...\"). Action messages (user text ending with \"*\") must still be recognized and handled, but the response should acknowledge the described action in a neutral way.",
+      "id": "REQ-23",
+      "text": "Update the backend deterministic response generator so Puro’s general (non-escape) replies are consistently in-character as a kind, book-reading black wolf with puffy fur and a hard mask, instead of echoing the user’s message.",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-1"
         ],
         "quotes": [
-          "Make the roleplay chat not really roleplay to puro"
+          "Puro is kind, reads books all the time, he is a black wolf with puffy fur with a hard mask. He never lets you run either."
         ]
       },
       "acceptanceCriteria": [
-        "Sending a normal dialogue message results in an assistant reply that does not include Puro roleplay mannerisms (e.g., no \"(tail wags)\"-style additions) and does not speak as a character roleplaying Puro.",
-        "Sending an action message (a message ending in \"*\") is still stored as messageType=action (with the trailing \"*\" removed from stored content) and the assistant reply acknowledges the action content in a neutral style without immersion/roleplay exposition.",
-        "The canister method signatures and stored ChatMessage schema remain compatible with the current frontend (no breaking candid/interface changes)."
+        "When the user sends a normal dialogue message that is not an escape attempt, the canister returns a new Puro-authored reply that is not identical to the user’s message content.",
+        "Puro’s replies include consistent characterization cues (kind tone; references to reading/books are used naturally and occasionally; physical description is internally consistent and does not contradict the provided traits).",
+        "Responses remain fully in-universe (no meta/external framing)."
       ]
     },
     {
-      "id": "REQ-18",
-      "text": "Update user-facing copy in the chat UI to remove roleplay-first phrasing that encourages talking \"to Puro\" and instead present the experience as a general chat assistant while keeping the existing action-message hint (\"*\" at the end for actions).",
-      "target": "frontend",
+      "id": "REQ-24",
+      "text": "Update the backend escape-attempt handling so that when the user tries to run/escape (in dialogue or action), Puro responds in-character by preventing the escape while matching the provided persona details (black wolf, puffy fur, hard mask, kind but firm). Remove contradictory descriptors in the current escape response.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-1"
         ],
         "quotes": [
-          "Make the roleplay chat not really roleplay to puro"
+          "He never lets you run either."
         ]
       },
       "acceptanceCriteria": [
-        "The empty state text no longer says \"Say hello to Puro!\" and is rewritten in English to invite a general conversation while still mentioning the \"*\" action convention.",
-        "The header/subtitle text no longer positions the bot as an in-character roleplay companion (e.g., replace \"Your friendly companion\" with neutral wording such as \"Chat assistant\" or similar).",
-        "No changes are made to any immutable frontend paths listed in SYSTEM_CONTEXT."
+        "Given an input message whose content matches the existing escape-attempt detection (e.g., contains \"run\"/\"escape\"/\"flee\"/\"leave\"/\"get away\"/\"go away\"), the returned Puro message attempts to stop/prevent the escape (block/chase/persuade) in a kind-but-firm manner.",
+        "The escape response does not describe Puro with conflicting traits (e.g., avoid mentioning a different body/material like a \"latex form\" if it contradicts the intended depiction).",
+        "Escape handling continues to work for both action messages (user ended input with \"*\") and normal dialogue messages."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor with all logic in backend/main.mo; add backend/migration.mo only if state/stable structure changes are required (not expected for this change).",
-    "Keep the existing action parsing behavior: user messages ending with \"*\" must still be treated as actions and rendered as actions in the UI.",
-    "Do not edit files under frontend/src/components/ui or other paths listed as immutable in SYSTEM_CONTEXT."
+    "Backend must remain a single Motoko actor with all logic in backend/main.mo.",
+    "Do not modify files under frontend/src/components/ui or other immutablePaths from SYSTEM_CONTEXT."
   ],
   "nonGoals": [
-    "Do not add third-party AI/LLM integrations.",
-    "Do not change authentication/guest-session behavior.",
-    "Do not remove the Puro avatar asset or redesign the entire UI theme beyond updating roleplay-oriented copy."
+    "Changing the frontend UI, layout, or theme.",
+    "Adding new authentication methods or external AI/LLM integrations.",
+    "Introducing new backend services or databases."
   ],
   "imageRequirements": {
     "required": [],

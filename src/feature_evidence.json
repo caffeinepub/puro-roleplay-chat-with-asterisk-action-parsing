@@ -1,25 +1,4 @@
 {
   "kind": "feature_evidence_report",
-  "features": [
-    {
-      "featureId": "feature-update-user-facing-copy-in-the-chat-ui-to-remove-roleplay-first-phrasing-that-encourages-talking-to-puro-and-instead-present-the-experience-as-a-general-chat-assistant-while-keeping-the-existing-action-message-hint-at-the-end-for-actions",
-      "featureTitle": "Update user-facing copy in the chat UI to remove roleplay-first phrasing that encourages talking \"to Puro\" and instead present the experience as a general chat assistant while keeping the existing action-message hint (\"*\" at the end for actions).",
-      "files": [
-        "frontend/src/components/chat/ChatTranscript.tsx",
-        "frontend/src/components/layout/ChatLayout.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-18"
-      ],
-      "confidence": "high"
-    }
-  ]
+  "features": []
 }

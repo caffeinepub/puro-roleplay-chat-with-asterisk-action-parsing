@@ -1,28 +1,6 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Neutralize roleplay-oriented copy in chat UI",
-  "requirements": [
-    {
-      "id": "REQ-18",
-      "summary": "Revise chat UI text to describe a general chat assistant (not roleplay with Puro) while keeping the action-message \"*\" hint.",
-      "acceptanceCriteria": [
-        "The empty state text no longer says \"Say hello to Puro!\" and is rewritten in English to invite a general conversation while still mentioning the \"*\" action convention.",
-        "The header/subtitle text no longer positions the bot as an in-character roleplay companion (e.g., replace \"Your friendly companion\" with neutral wording such as \"Chat assistant\" or similar).",
-        "No changes are made to any immutable frontend paths listed in SYSTEM_CONTEXT."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/chat/ChatTranscript.tsx",
-          "operation": "modify",
-          "description": "Update the empty-state prompt copy to remove \"Say hello to Puro!\" and replace it with neutral assistant-oriented wording while still explicitly mentioning that messages ending with \"*\" are treated as actions."
-        },
-        {
-          "path": "frontend/src/components/layout/ChatLayout.tsx",
-          "operation": "modify",
-          "description": "Update the header/subtitle copy to remove roleplay/companion framing (e.g., replace \"Your friendly companion\" with neutral assistant wording such as \"Chat assistant\"). Keep existing layout and avoid changes to any immutable UI component paths."
-        }
-      ]
-    }
-  ]
+  "title": "Frontend plan: no changes required for Puro persona backend-only refinements",
+  "requirements": []
 }

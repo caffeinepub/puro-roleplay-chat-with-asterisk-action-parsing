@@ -1,34 +1,28 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-15T01:17:07.041Z",
+  "generatedAt": "2026-02-15T01:34:14.537Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
     "total": 2,
-    "implemented": 1,
+    "implemented": 0,
     "items": [
       {
-        "id": "REQ-17",
-        "summary": "Update the backend response generator so the assistant no longer strongly roleplays as Puro, producing neutral, helpful conversational replies instead of in-character mannerisms (e.g., remove roleplay stage directions like \"(tail wags)\" and immersion/roleplay framing like \"Puro sees you ...\"). Action messages (user text ending with \"*\") must still be recognized and handled, but the response should acknowledge the described action in a neutral way.",
+        "id": "REQ-23",
+        "summary": "Update the backend deterministic response generator so Puro’s general (non-escape) replies are consistently in-character as a kind, book-reading black wolf with puffy fur and a hard mask, instead of echoing the user’s message.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
-        "id": "REQ-18",
-        "summary": "Update user-facing copy in the chat UI to remove roleplay-first phrasing that encourages talking \"to Puro\" and instead present the experience as a general chat assistant while keeping the existing action-message hint (\"*\" at the end for actions).",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/chat/ChatTranscript.tsx",
-          "frontend/src/components/layout/ChatLayout.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/chat/ChatTranscript.tsx",
-          "frontend/src/components/layout/ChatLayout.tsx"
-        ]
+        "id": "REQ-24",
+        "summary": "Update the backend escape-attempt handling so that when the user tries to run/escape (in dialogue or action), Puro responds in-character by preventing the escape while matching the provided persona details (black wolf, puffy fur, hard mask, kind but firm). Remove contradictory descriptors in the current escape response.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       }
     ]
   },
@@ -36,10 +30,11 @@
     "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
-    "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/chat/ChatTranscript.tsx",
-    "frontend/src/components/layout/ChatLayout.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",
