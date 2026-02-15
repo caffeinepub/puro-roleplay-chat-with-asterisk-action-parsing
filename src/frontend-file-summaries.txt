@@ -4,7 +4,7 @@
   "frontend/src/components/layout/ChatLayout.tsx": "Layout wrapper component providing consistent header with Puro branding, main content area, and footer with attribution across the chat interface.",
   "frontend/src/components/auth/LoginButton.tsx": "Authentication button component that handles login/logout with Internet Identity and clears cached data on logout.",
   "frontend/src/components/profile/ProfileSetupModal.tsx": "Modal dialog that prompts new users to enter their display name on first login before accessing the chat, with close button hidden via CSS and non-dismissible behavior.",
-  "frontend/src/components/chat/PuroAvatar.tsx": "Reusable avatar component displaying Puro's image with configurable sizes and consistent styling.",
+  "frontend/src/components/chat/PuroAvatar.tsx": "Reusable avatar component displaying Puro's Changed (DragonSnow) character image with configurable sizes (sm/md/lg/xl) and consistent circular styling with accent background and primary ring.",
   "frontend/src/components/chat/ChatTranscript.tsx": "Scrollable message list component that renders all chat messages or shows an empty state prompt when no messages exist.",
   "frontend/src/components/chat/MessageBubble.tsx": "Individual message display component that visually distinguishes between user/Puro messages and action/dialogue types with appropriate styling.",
   "frontend/src/components/chat/ChatComposer.tsx": "Message input component with textarea, send button, Enter-to-send (Shift+Enter for newline), and visual indicator for action messages ending with asterisk.",

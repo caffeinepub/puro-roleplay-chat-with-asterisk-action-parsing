@@ -4,8 +4,8 @@ import Iter "mo:core/Iter";
 import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
 import Text "mo:core/Text";
-import Char "mo:core/Char";
 import Time "mo:core/Time";
+import Char "mo:core/Char";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 
@@ -23,25 +23,23 @@ actor {
     };
   };
 
-  // Roleplay Puro response generator
-  func generateResponse(userMessage : ChatMessage) : ChatMessage {
-    let (content, messageType) = switch (userMessage.messageType) {
+  func puroPersonality(text : Text, messageType : { #action : () ; #dialogue : () }) : Text {
+    switch (messageType) {
       case (#action) {
-        (
-          "Puro sees you " # userMessage.content # ". Actions like jumping, waving, or running might be part of your imagination!",
-          #dialogue,
-        );
+        "Um... Puro sees you " # text # ". hehe " # " If you do actions like" # "running, jumping or waving, that`s because you said so in your" # "message. I`m not very good at jumping myself but I love being playful~";
       };
       case (#dialogue) {
-        (userMessage.content, #dialogue);
+        text # " (tail wags)";
       };
     };
+  };
 
+  func generatePuroResponse(userMessage : ChatMessage) : ChatMessage {
     {
       timestamp = Time.now();
-      content;
+      content = puroPersonality(userMessage.content, userMessage.messageType);
       sender = #Puro;
-      messageType;
+      messageType = #dialogue;
     };
   };
 
@@ -87,14 +85,14 @@ actor {
       Runtime.trap("Unauthorized: Only users can send messages");
     };
 
-    let isActionFlag = isAction(message.content);
+    let isActionMsg = isAction(message.content);
 
     let processedMessage = {
       message with
       timestamp = Time.now();
-      messageType = if isActionFlag { #action } else { #dialogue };
+      messageType = if isActionMsg { #action } else { #dialogue };
       content = (
-        if (isActionFlag and message.content.size() > 0) {
+        if (isActionMsg and message.content.size() > 0) {
           let chars = message.content.toArray();
           Text.fromArray(chars.sliceToArray(0, chars.size() - 1));
         } else {
@@ -110,7 +108,7 @@ actor {
     };
     chatSessions.add(caller, previousMessages.concat(newContent));
 
-    let puroResponse = generateResponse(processedMessage);
+    let puroResponse = generatePuroResponse(processedMessage);
 
     let responseContent = [puroResponse];
     let previousMessages2 = switch (chatSessions.get(caller)) {

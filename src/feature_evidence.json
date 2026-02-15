@@ -2,96 +2,9 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-implement-a-chat-experience-where-the-assistant-roleplays-as-the-character-puro-maintaining-a-consistent-in-character-voice-across-messages-and-responding-to-the-user-s-inputs-with-short-conversational-replies",
-      "featureTitle": "Implement a chat experience where the assistant roleplays as the character “Puro”, maintaining a consistent in-character voice across messages, and responding to the user’s inputs with short conversational replies.",
+      "featureId": "feature-update-the-puro-avatar-image-to-visually-match-puro-from-changed-by-dragonsnow-and-update-the-frontend-to-use-the-updated-avatar-asset",
+      "featureTitle": "Update the Puro avatar image to visually match Puro from “Changed” by DragonSnow, and update the frontend to use the updated avatar asset.",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/auth/LoginButton.tsx",
-        "frontend/src/components/profile/ProfileSetupModal.tsx",
-        "frontend/src/pages/ChatPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-parse-user-input-for-roleplay-actions-marked-by-an-asterisk-when-the-user-types-text-ending-with-e-g-waves-treat-it-as-an-action-rather-than-spoken-dialogue-store-render-it-as-an-action-and-have-puro-acknowledge-it-as-an-action-in-the-reply",
-      "featureTitle": "Parse user input for roleplay actions marked by an asterisk: when the user types text ending with “*” (e.g., “waves*”), treat it as an action rather than spoken dialogue, store/render it as an action, and have Puro acknowledge it as an action in the reply.",
-      "files": [
-        "frontend/src/components/chat/MessageBubble.tsx",
-        "frontend/src/pages/ChatPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-build-the-frontend-chat-ui-using-react-with-a-message-list-input-box-and-send-action-include-loading-sending-states-and-error-handling-render-action-messages-differently-from-dialogue-messages-and-support-enter-to-send-with-shift-enter-for-newline",
-      "featureTitle": "Build the frontend chat UI using React with a message list, input box, and send action; include loading/sending states and error handling; render action messages differently from dialogue messages; and support Enter-to-send (with Shift+Enter for newline).",
-      "files": [
-        "frontend/src/components/chat/ChatComposer.tsx",
-        "frontend/src/components/chat/ChatTranscript.tsx",
-        "frontend/src/pages/ChatPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-5"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-choose-and-apply-a-coherent-visual-theme-for-the-app-colors-typography-spacing-and-component-styling-that-fits-a-friendly-sci-fi-lab-creature-companion-chat-vibe-and-apply-it-consistently-across-the-chat-screen",
-      "featureTitle": "Choose and apply a coherent visual theme for the app (colors, typography, spacing, and component styling) that fits a friendly sci‑fi lab/creature-companion chat vibe, and apply it consistently across the chat screen.",
-      "files": [
-        "frontend/src/components/layout/ChatLayout.tsx",
-        "frontend/src/index.css",
-        "frontend/src/pages/ChatPage.tsx",
-        "frontend/tailwind.config.js"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-6"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-puro-avatar-image-as-a-static-asset-and-display-it-in-the-ui-e-g-header-and-or-beside-puro-s-messages-store-generated-images-under-frontend-public-assets-generated-and-reference-them-directly-from-the-frontend",
-      "featureTitle": "Add a Puro avatar image as a static asset and display it in the UI (e.g., header and/or beside Puro’s messages). Store generated images under frontend/public/assets/generated and reference them directly from the frontend.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/chat/MessageBubble.tsx",
         "frontend/src/components/chat/PuroAvatar.tsx"
       ],
       "components": [
@@ -103,7 +16,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-7"
+        "REQ-10"
       ],
       "confidence": "high"
     }

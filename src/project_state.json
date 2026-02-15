@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
-  "summary": "AI chat app to roleplay chatting with Puro, treating user inputs marked with an asterisk as action/roleplay cues.",
+  "projectStateVersion": 5,
+  "summary": "AI chat app to roleplay chatting with Puro specifically as depicted in the game “Changed” by DragonSnow, treating user inputs marked with an asterisk as action/roleplay cues.",
   "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Friendly anthropomorphic creature avatar portrait, soft sci‑fi lab aesthetic, clean background (puro-avatar.dim_512x512.png)",
+  "imageRequirements": "## Edit Images\n- Make the existing Puro avatar look like Puro from the game Changed: anthropomorphic wolf/dog-like creature, black/dark fur with white facial markings, expressive friendly eyes, subtle sci‑fi lab vibe, clean background (puro-avatar.dim_512x512.png > puro-avatar-changed.dim_512x512.png)",
   "existing_features": [
     {
       "id": "feature-implement-a-chat-experience-where-the-assistant-roleplays-as-the-character-puro-maintaining-a-consistent-in-character-voice-across-messages-and-responding-to-the-user-s-inputs-with-short-conversational-replies",
@@ -46,6 +46,14 @@
         "REQ-7"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-the-puro-avatar-image-to-visually-match-puro-from-changed-by-dragonsnow-and-update-the-frontend-to-use-the-updated-avatar-asset",
+      "title": "Update the Puro avatar image to visually match Puro from “Changed” by DragonSnow, and update the frontend to use the updated avatar asset.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -74,6 +82,28 @@
       "summary": "Implement a deterministic, local (non-third-party) response generator for Puro in the backend that produces replies based on the latest user message and recent history (including special handling for action messages).",
       "reqIds": [
         "REQ-4"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Adjust Puro’s in-character persona/behavior to match Puro from the game “Changed” by DragonSnow (voice, mannerisms, and characterization).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Update the backend Puro response generator so Puro’s replies consistently roleplay as Puro from the game “Changed” by DragonSnow (voice, mannerisms, characterization) instead of echoing the user message or using generic phrasing.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Improve backend handling of action messages (messages entered by the user ending with “*”) so Puro responds in-character to the described action and does not use immersion-breaking language (e.g., avoid implying the action is “part of your imagination”).",
+      "reqIds": [
+        "REQ-9"
       ],
       "status": "pending"
     }

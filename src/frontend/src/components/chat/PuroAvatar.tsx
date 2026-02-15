@@ -13,7 +13,7 @@ export default function PuroAvatar({ size = 'md' }: PuroAvatarProps) {
   return (
     <div className={`${sizeClasses[size]} flex-shrink-0 overflow-hidden rounded-full bg-accent/20 ring-2 ring-primary/20`}>
       <img
-        src="/assets/generated/puro-avatar.dim_512x512.png"
+        src="/assets/generated/puro-avatar-changed.dim_512x512.png"
         alt="Puro"
         className="h-full w-full object-cover"
       />
