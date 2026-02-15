@@ -1,95 +1,45 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-15T01:01:56.831Z",
+  "generatedAt": "2026-02-15T01:17:07.041Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 6,
-    "implemented": 4,
+    "total": 2,
+    "implemented": 1,
     "items": [
       {
-        "id": "REQ-11",
-        "summary": "Update the app so users can access the chat without Internet Identity login (no authentication gate). The chat experience should work in “guest mode” by default.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/App.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/App.tsx"
-        ]
-      },
-      {
-        "id": "REQ-12",
-        "summary": "Remove the Internet Identity login/logout UI from the chat layout so the header no longer displays a Login/Logout button.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/layout/ChatLayout.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/layout/ChatLayout.tsx"
-        ]
-      },
-      {
-        "id": "REQ-13",
-        "summary": "Add a per-browser “guest session id” to keep chat history and profile data separate between different anonymous users, and use it for all chat/profile calls when the caller is anonymous.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/hooks/useGuestSessionId.ts",
-          "frontend/src/utils/guestSession.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/hooks/useGuestSessionId.ts",
-          "frontend/src/utils/guestSession.ts"
-        ]
-      },
-      {
-        "id": "REQ-14",
-        "summary": "Modify backend authorization behavior so guest users (anonymous callers) can use the chat and profile features without needing access control initialization, while preserving existing behavior for authenticated principals.",
+        "id": "REQ-17",
+        "summary": "Update the backend response generator so the assistant no longer strongly roleplays as Puro, producing neutral, helpful conversational replies instead of in-character mannerisms (e.g., remove roleplay stage directions like \"(tail wags)\" and immersion/roleplay framing like \"Puro sees you ...\"). Action messages (user text ending with \"*\") must still be recognized and handled, but the response should acknowledge the described action in a neutral way.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
-        "id": "REQ-15",
-        "summary": "Update the frontend React Query hooks and backend interface usage so all necessary calls include the guest session id when running anonymously, and continue to work without code changes from the user.",
+        "id": "REQ-18",
+        "summary": "Update user-facing copy in the chat UI to remove roleplay-first phrasing that encourages talking \"to Puro\" and instead present the experience as a general chat assistant while keeping the existing action-message hint (\"*\" at the end for actions).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/App.tsx"
+          "frontend/src/components/chat/ChatTranscript.tsx",
+          "frontend/src/components/layout/ChatLayout.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/App.tsx"
+          "frontend/src/components/chat/ChatTranscript.tsx",
+          "frontend/src/components/layout/ChatLayout.tsx"
         ]
-      },
-      {
-        "id": "REQ-16",
-        "summary": "If changing backend stable data structures is required to support guest session keys alongside principals, add an upgrade-safe state migration that preserves existing authenticated users’ chat histories and profiles.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
       }
     ]
   },
   "changedFiles": [
     "backend/main.mo",
-    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/App.tsx",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
+    "frontend/src/components/chat/ChatTranscript.tsx",
     "frontend/src/components/layout/ChatLayout.tsx",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useGuestSessionId.ts",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/utils/guestSession.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

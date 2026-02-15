@@ -2,28 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-app-so-users-can-access-the-chat-without-internet-identity-login-no-authentication-gate-the-chat-experience-should-work-in-guest-mode-by-default",
-      "featureTitle": "Update the app so users can access the chat without Internet Identity login (no authentication gate). The chat experience should work in “guest mode” by default.",
+      "featureId": "feature-update-user-facing-copy-in-the-chat-ui-to-remove-roleplay-first-phrasing-that-encourages-talking-to-puro-and-instead-present-the-experience-as-a-general-chat-assistant-while-keeping-the-existing-action-message-hint-at-the-end-for-actions",
+      "featureTitle": "Update user-facing copy in the chat UI to remove roleplay-first phrasing that encourages talking \"to Puro\" and instead present the experience as a general chat assistant while keeping the existing action-message hint (\"*\" at the end for actions).",
       "files": [
-        "frontend/src/App.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-11"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-remove-the-internet-identity-login-logout-ui-from-the-chat-layout-so-the-header-no-longer-displays-a-login-logout-button",
-      "featureTitle": "Remove the Internet Identity login/logout UI from the chat layout so the header no longer displays a Login/Logout button.",
-      "files": [
+        "frontend/src/components/chat/ChatTranscript.tsx",
         "frontend/src/components/layout/ChatLayout.tsx"
       ],
       "components": [
@@ -35,47 +17,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-12"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-per-browser-guest-session-id-to-keep-chat-history-and-profile-data-separate-between-different-anonymous-users-and-use-it-for-all-chat-profile-calls-when-the-caller-is-anonymous",
-      "featureTitle": "Add a per-browser “guest session id” to keep chat history and profile data separate between different anonymous users, and use it for all chat/profile calls when the caller is anonymous.",
-      "files": [
-        "frontend/src/hooks/useGuestSessionId.ts",
-        "frontend/src/utils/guestSession.ts"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-13"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-the-frontend-react-query-hooks-and-backend-interface-usage-so-all-necessary-calls-include-the-guest-session-id-when-running-anonymously-and-continue-to-work-without-code-changes-from-the-user",
-      "featureTitle": "Update the frontend React Query hooks and backend interface usage so all necessary calls include the guest session id when running anonymously, and continue to work without code changes from the user.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/hooks/useQueries.ts"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-15"
+        "REQ-18"
       ],
       "confidence": "high"
     }

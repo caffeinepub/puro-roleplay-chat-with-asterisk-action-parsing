@@ -8,9 +8,9 @@ import Time "mo:core/Time";
 import Char "mo:core/Char";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
-import Migration "migration";
 
-(with migration = Migration.run)
+
+
 actor {
   type ChatMessage = {
     timestamp : Time.Time;
@@ -25,21 +25,19 @@ actor {
     };
   };
 
-  func puroPersonality(text : Text, messageType : { #action : () ; #dialogue : () }) : Text {
+  func neutralResponse(text : Text, messageType : { #action : () ; #dialogue : () }) : Text {
     switch (messageType) {
       case (#action) {
-        "Um... Puro sees you " # text # ". hehe " # " If you do actions like" # "running, jumping or waving, that`s because you said so in your" # "message. I`m not very good at jumping myself but I love being playful~";
+        "Thank you for the message. You mentioned an action: " # text # ". I'm here to respond to your input and have a conversation with you.";
       };
-      case (#dialogue) {
-        text # " (tail wags)";
-      };
+      case (#dialogue) { text };
     };
   };
 
-  func generatePuroResponse(userMessage : ChatMessage) : ChatMessage {
+  func generateNeutralResponse(userMessage : ChatMessage) : ChatMessage {
     {
       timestamp = Time.now();
-      content = puroPersonality(userMessage.content, userMessage.messageType);
+      content = neutralResponse(userMessage.content, userMessage.messageType);
       sender = #Puro;
       messageType = #dialogue;
     };
@@ -57,19 +55,17 @@ actor {
   let userProfiles = Map.empty<Text, UserProfile>();
 
   public query ({ caller }) func getCallerUserProfile(sessionId : Text) : async ?UserProfile {
+    // No authorization check needed - both authenticated users and guests can view their own profile
     let key = determineProfileKey(caller, sessionId);
     userProfiles.get(key);
   };
 
   public query ({ caller }) func getUserProfile(user : Text) : async ?UserProfile {
     // Authorization: Users can only view their own profile, admins can view any profile
-    let callerKey = if (caller.isAnonymous()) {
-      // Anonymous users cannot view other profiles by user text key
-      "";
-    } else {
-      caller.toText();
-    };
-
+    let callerKey = determineProfileKey(caller, "");
+    
+    // For anonymous users, they can only view profiles by sessionId (which would be their own)
+    // For authenticated users, callerKey is their principal text
     if (user != callerKey and not AccessControl.isAdmin(accessControlState, caller)) {
       Runtime.trap("Unauthorized: Can only view your own profile");
     };
@@ -103,7 +99,13 @@ actor {
     sessionKey : Text,
     message : ChatMessage,
   ) : async ChatMessage {
-    // No authorization check needed - both authenticated users and guests can send messages
+    // Authorization: Users can only send messages to their own session, admins can send to any session
+    let callerKey = determineProfileKey(caller, sessionKey);
+    
+    if (sessionKey != callerKey and not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Can only send messages to your own session");
+    };
+
     let isActionMsg = isAction(message.content);
 
     let processedMessage = {
@@ -127,16 +129,16 @@ actor {
     };
     chatSessions.add(sessionKey, previousMessages.concat(newContent));
 
-    let puroResponse = generatePuroResponse(processedMessage);
+    let neutralResponse = generateNeutralResponse(processedMessage);
 
-    let responseContent = [puroResponse];
+    let responseContent = [neutralResponse];
     let previousMessages2 = switch (chatSessions.get(sessionKey)) {
       case (null) { [] };
       case (?v) { v };
     };
     chatSessions.add(sessionKey, previousMessages2.concat(responseContent));
 
-    puroResponse;
+    neutralResponse;
   };
 
   public query ({ caller }) func getHistory(sessionKey : Text) : async [ChatMessage] {
@@ -153,4 +155,3 @@ actor {
     };
   };
 };
-

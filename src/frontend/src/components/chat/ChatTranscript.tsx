@@ -15,7 +15,7 @@ export default function ChatTranscript({ messages }: ChatTranscriptProps) {
         <div className="space-y-2">
           <h3 className="text-lg font-semibold text-foreground">Start a conversation</h3>
           <p className="text-sm text-muted-foreground max-w-sm">
-            Say hello to Puro! You can chat normally or use * at the end of your message to describe actions.
+            Send a message to begin chatting. You can chat normally or use * at the end of your message to describe actions.
           </p>
         </div>
       </div>

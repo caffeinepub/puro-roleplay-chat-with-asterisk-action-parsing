@@ -1,11 +1,11 @@
 {
   "frontend/src/App.tsx": "Main application component that renders the chat experience directly in guest mode, showing only a profile setup modal on first visit before allowing chat access.",
   "frontend/src/pages/ChatPage.tsx": "Primary chat interface page that displays message history, handles sending messages, shows loading/error states, and manages the chat composer.",
-  "frontend/src/components/layout/ChatLayout.tsx": "Layout wrapper component providing consistent header with Puro branding, main content area, and footer with attribution; login/logout UI removed to support guest-only flow.",
+  "frontend/src/components/layout/ChatLayout.tsx": "Layout wrapper component providing consistent header with Puro branding (now labeled as \"Chat assistant\" instead of \"Your friendly companion\"), main content area, and footer with attribution.",
   "frontend/src/components/auth/LoginButton.tsx": "Authentication button component that handles login/logout with Internet Identity and clears cached data on logout.",
   "frontend/src/components/profile/ProfileSetupModal.tsx": "Modal dialog that prompts new users to enter their display name on first login before accessing the chat, with close button hidden via CSS and non-dismissible behavior.",
   "frontend/src/components/chat/PuroAvatar.tsx": "Reusable avatar component displaying Puro's Changed (DragonSnow) character image with configurable sizes (sm/md/lg/xl) and consistent circular styling with accent background and primary ring.",
-  "frontend/src/components/chat/ChatTranscript.tsx": "Scrollable message list component that renders all chat messages or shows an empty state prompt when no messages exist.",
+  "frontend/src/components/chat/ChatTranscript.tsx": "Scrollable message list component that renders all chat messages or shows an empty state prompt with neutral assistant-oriented wording and explicit mention of the \"*\" action convention.",
   "frontend/src/components/chat/MessageBubble.tsx": "Individual message display component that visually distinguishes between user/Puro messages and action/dialogue types with appropriate styling.",
   "frontend/src/components/chat/ChatComposer.tsx": "Message input component with textarea, send button, Enter-to-send (Shift+Enter for newline), and visual indicator for action messages ending with asterisk.",
   "frontend/src/hooks/useQueries.ts": "React Query hooks for backend operations (profile, chat history, messages) that now pass session identifiers (guest session ID for anonymous users, principal for authenticated users) to all backend calls and scope query keys by session.",

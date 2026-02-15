@@ -1,126 +1,54 @@
 {
   "kind": "build_request",
-  "title": "Remove Internet Identity requirement and enable guest chat sessions",
+  "title": "Reduce Puro roleplay and shift assistant responses to a neutral chat style",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-11",
-      "text": "Update the app so users can access the chat without Internet Identity login (no authentication gate). The chat experience should work in “guest mode” by default.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "Make it skip internet identity"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Opening the app takes the user directly to the chat experience without requiring a login step.",
-        "No login screen is shown anywhere in the normal user flow.",
-        "All user-facing text related to logging in is removed or replaced with guest-friendly wording."
-      ]
-    },
-    {
-      "id": "REQ-12",
-      "text": "Remove the Internet Identity login/logout UI from the chat layout so the header no longer displays a Login/Logout button.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "Make it skip internet identity"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The chat header does not render the LoginButton component.",
-        "The app header still shows Puro branding/avatar as before.",
-        "No “Login”, “Logout”, or “Logging in...” text is visible in the UI."
-      ]
-    },
-    {
-      "id": "REQ-13",
-      "text": "Add a per-browser “guest session id” to keep chat history and profile data separate between different anonymous users, and use it for all chat/profile calls when the caller is anonymous.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "Make it skip internet identity"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Frontend generates and persists a stable guest session id in browser storage (survives refresh).",
-        "Backend stores and retrieves chat history based on this guest session id for anonymous callers (so different browsers/devices do not share one anonymous chat history).",
-        "Saving and fetching the user profile works in guest mode using the same guest session id."
-      ]
-    },
-    {
-      "id": "REQ-14",
-      "text": "Modify backend authorization behavior so guest users (anonymous callers) can use the chat and profile features without needing access control initialization, while preserving existing behavior for authenticated principals.",
+      "id": "REQ-17",
+      "text": "Update the backend response generator so the assistant no longer strongly roleplays as Puro, producing neutral, helpful conversational replies instead of in-character mannerisms (e.g., remove roleplay stage directions like \"(tail wags)\" and immersion/roleplay framing like \"Puro sees you ...\"). Action messages (user text ending with \"*\") must still be recognized and handled, but the response should acknowledge the described action in a neutral way.",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-6"
         ],
         "quotes": [
-          "Make it skip internet identity"
+          "Make the roleplay chat not really roleplay to puro"
         ]
       },
       "acceptanceCriteria": [
-        "Anonymous callers can call the chat and profile APIs successfully (no “Unauthorized: Only users...” traps for guest flows).",
-        "Authenticated callers still follow the existing permission checks (no regression for non-anonymous principals)."
+        "Sending a normal dialogue message results in an assistant reply that does not include Puro roleplay mannerisms (e.g., no \"(tail wags)\"-style additions) and does not speak as a character roleplaying Puro.",
+        "Sending an action message (a message ending in \"*\") is still stored as messageType=action (with the trailing \"*\" removed from stored content) and the assistant reply acknowledges the action content in a neutral style without immersion/roleplay exposition.",
+        "The canister method signatures and stored ChatMessage schema remain compatible with the current frontend (no breaking candid/interface changes)."
       ]
     },
     {
-      "id": "REQ-15",
-      "text": "Update the frontend React Query hooks and backend interface usage so all necessary calls include the guest session id when running anonymously, and continue to work without code changes from the user.",
+      "id": "REQ-18",
+      "text": "Update user-facing copy in the chat UI to remove roleplay-first phrasing that encourages talking \"to Puro\" and instead present the experience as a general chat assistant while keeping the existing action-message hint (\"*\" at the end for actions).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-6"
         ],
         "quotes": [
-          "Make it skip internet identity"
+          "Make the roleplay chat not really roleplay to puro"
         ]
       },
       "acceptanceCriteria": [
-        "Chat history loads in guest mode without errors.",
-        "Sending a message in guest mode succeeds and the transcript updates as expected.",
-        "Profile setup modal can save the name in guest mode and then allows entry into the chat.",
-        "No runtime errors occur due to backend signature changes (frontend stays in sync with the updated canister API)."
-      ]
-    },
-    {
-      "id": "REQ-16",
-      "text": "If changing backend stable data structures is required to support guest session keys alongside principals, add an upgrade-safe state migration that preserves existing authenticated users’ chat histories and profiles.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "Make it skip internet identity"
-        ]
-      },
-      "acceptanceCriteria": [
-        "After an upgrade, existing principal-based chat histories and profiles remain accessible for authenticated users.",
-        "Migration runs only when needed and does not corrupt or erase existing state.",
-        "Guest session data is stored separately from principal-based data."
+        "The empty state text no longer says \"Say hello to Puro!\" and is rewritten in English to invite a general conversation while still mentioning the \"*\" action convention.",
+        "The header/subtitle text no longer positions the bot as an in-character roleplay companion (e.g., replace \"Your friendly companion\" with neutral wording such as \"Chat assistant\" or similar).",
+        "No changes are made to any immutable frontend paths listed in SYSTEM_CONTEXT."
       ]
     }
   ],
   "constraints": [
-    "Do not edit read-only frontend paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
-    "Backend must remain a single Motoko actor in backend/main.mo; only add backend/migration.mo if state migration is needed.",
-    "Use English for all user-facing text."
+    "Backend must remain a single Motoko actor with all logic in backend/main.mo; add backend/migration.mo only if state/stable structure changes are required (not expected for this change).",
+    "Keep the existing action parsing behavior: user messages ending with \"*\" must still be treated as actions and rendered as actions in the UI.",
+    "Do not edit files under frontend/src/components/ui or other paths listed as immutable in SYSTEM_CONTEXT."
   ],
   "nonGoals": [
-    "Implementing third-party authentication providers (only Internet Identity exists, but this change is to avoid requiring it).",
-    "Adding real-time messaging (WebSockets) or external databases.",
-    "Redesigning the chat UI beyond removing the login gate and login/logout affordances."
+    "Do not add third-party AI/LLM integrations.",
+    "Do not change authentication/guest-session behavior.",
+    "Do not remove the Puro avatar asset or redesign the entire UI theme beyond updating roleplay-oriented copy."
   ],
   "imageRequirements": {
     "required": [],

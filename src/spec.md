@@ -1,14 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Remove the Internet Identity login requirement so the chat works in guest mode by default, while keeping authenticated behavior intact.
+**Goal:** Shift the chat experience from Puro-focused roleplay to neutral, helpful assistant-style conversation while preserving action-message handling.
 
 **Planned changes:**
-- Remove the Internet Identity authentication gate so opening the app goes directly into the chat experience (guest mode).
-- Remove all login/logout UI and related user-facing text from the normal chat layout/header while keeping existing Puro branding/avatar.
-- Add a per-browser persisted guest session id and use it for guest chat history and profile storage/retrieval.
-- Update backend authorization to allow anonymous (guest) callers to use chat and profile APIs while preserving existing permission checks for authenticated principals.
-- Update frontend data hooks/API usage so guest calls include the guest session id and continue to work end-to-end (load history, send messages, save profile).
-- If backend state structures must change, add an upgrade-safe migration that preserves existing principal-based chat histories/profiles and stores guest data separately.
+- Update backend response generation to avoid Puro in-character roleplay mannerisms and immersion framing, while still recognizing and neutrally acknowledging action messages (messages ending with "*").
+- Update chat UI copy to remove roleplay-first phrasing (e.g., references to talking “to Puro”) and present the bot as a general chat assistant, while keeping the existing hint about using "*" for actions.
 
-**User-visible outcome:** Users can open the app and immediately chat as a guest with their own per-browser chat history and profile saved, without seeing any login/logout flow; authenticated users continue to have their existing behavior and data.
+**User-visible outcome:** Users can chat with the assistant in a neutral style (not roleplay as Puro), and action messages ending in "*" are still treated as actions and acknowledged plainly.

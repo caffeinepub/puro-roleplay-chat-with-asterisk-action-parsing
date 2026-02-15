@@ -1,37 +1,25 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-15T01:01:56.828Z",
-  "summary": "Implemented guest-mode session IDs on the frontend, updated React Query hooks to pass a session key for anonymous users, updated backend storage to key chats/profiles by Text (session key) and added a migration module. Removed login/logout UI from the chat layout header. However, backend auth behavior for authenticated principals appears changed (authorization checks removed broadly), and some additional UI/footer content was added that was not requested.",
+  "generatedAt": "2026-02-15T01:17:07.038Z",
+  "summary": "REQ-18 frontend copy updates appear implemented (empty state and header/subtitle now neutral and still mention the \"*\" action convention). REQ-17 backend changes partially implemented: action parsing/storage is preserved and action replies are neutral, but dialogue replies are not a neutral/helpful assistant response—they simply echo the user’s input.",
   "missing_requirements": [
     {
-      "id": "REQ-14",
-      "requirement": "Preserve existing permission checks/authorization behavior for authenticated principals while allowing anonymous (guest) callers to use chat/profile without traps.",
-      "reason": "The diff explicitly removes authorization checks for both guests and authenticated users on key mutating endpoints (e.g., sendMessage, saveCallerUserProfile), which risks a regression versus the requirement to preserve existing authenticated behavior.",
+      "id": "REQ-17",
+      "requirement": "Backend assistant should produce neutral, helpful conversational replies for normal dialogue messages (not roleplay/in-character), while preserving existing action parsing/handling.",
+      "reason": "The new dialogue-path response generator returns the user’s text unchanged (echo), rather than generating a neutral/helpful assistant reply. This does not meet the requirement to shift responses to a neutral chat-assistant style.",
       "evidence": [
-        "backend/main.mo (comments: \"No authorization check needed - both authenticated users and guests can send messages\" and \"No authorization check needed - both authenticated users and guests can save their own profiles\")"
+        "backend/main.mo (neutralResponse: case (#dialogue) { text })"
       ]
     }
   ],
-  "hallucinated_features": [
-    {
-      "description": "Added/changed footer content including \"Built with ❤️ using caffeine.ai\" attribution and social share icons/links in the chat layout.",
-      "reason": "The BuildRequest explicitly lists UI redesign beyond removing login gate/affordances as a non-goal; the diff shows new footer text, emoji, and share icons which are not part of the requested changes.",
-      "evidence": [
-        "frontend/src/components/layout/ChatLayout.tsx"
-      ]
-    }
-  ],
-  "confidence": 0.62,
+  "hallucinated_features": [],
+  "confidence": 0.72,
   "changed_files": [
     "backend/main.mo",
-    "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/App.tsx",
+    "frontend/src/components/chat/ChatTranscript.tsx",
     "frontend/src/components/layout/ChatLayout.tsx",
-    "frontend/src/hooks/useGuestSessionId.ts",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/utils/guestSession.ts",
     "project_state.json"
   ]
 }

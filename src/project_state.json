@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 7,
-  "summary": "AI chat app to roleplay chatting with Puro specifically as depicted in the game “Changed” by DragonSnow, treating user inputs marked with an asterisk as action/roleplay cues.",
+  "projectStateVersion": 9,
+  "summary": "AI chat app where the assistant does not strongly roleplay as Puro; user inputs marked with an asterisk are still treated as action/roleplay cues.",
   "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
@@ -85,6 +85,14 @@
         "REQ-15"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-user-facing-copy-in-the-chat-ui-to-remove-roleplay-first-phrasing-that-encourages-talking-to-puro-and-instead-present-the-experience-as-a-general-chat-assistant-while-keeping-the-existing-action-message-hint-at-the-end-for-actions",
+      "title": "Update user-facing copy in the chat UI to remove roleplay-first phrasing that encourages talking \"to Puro\" and instead present the experience as a general chat assistant while keeping the existing action-message hint (\"*\" at the end for actions).",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -157,6 +165,20 @@
       "summary": "If changing backend stable data structures is required to support guest session keys alongside principals, add an upgrade-safe state migration that preserves existing authenticated users’ chat histories and profiles.",
       "reqIds": [
         "REQ-16"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Update the chat experience so the assistant no longer (or only minimally) roleplays as Puro, shifting away from strict in-character responses.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Update the backend response generator so the assistant no longer strongly roleplays as Puro, producing neutral, helpful conversational replies instead of in-character mannerisms (e.g., remove roleplay stage directions like \"(tail wags)\" and immersion/roleplay framing like \"Puro sees you ...\"). Action messages (user text ending with \"*\") must still be recognized and handled, but the response should acknowledge the described action in a neutral way.",
+      "reqIds": [
+        "REQ-17"
       ],
       "status": "pending"
     }
