@@ -6,6 +6,7 @@ import Runtime "mo:core/Runtime";
 import Text "mo:core/Text";
 import Time "mo:core/Time";
 import Char "mo:core/Char";
+import Nat "mo:core/Nat";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 
@@ -33,28 +34,22 @@ actor {
   };
 
   let userProfiles = Map.empty<Text, UserProfile>();
+  var nextRandomSeed = 0;
 
   public query ({ caller }) func getCallerUserProfile(sessionId : Text) : async ?UserProfile {
-    // No authorization check needed - both authenticated users and guests can view their own profile
     let key = determineProfileKey(caller, sessionId);
     userProfiles.get(key);
   };
 
   public query ({ caller }) func getUserProfile(user : Text) : async ?UserProfile {
-    // Authorization: Users can only view their own profile, admins can view any profile
     let callerKey = determineProfileKey(caller, "");
-    
-    // For anonymous users, they can only view profiles by sessionId (which would be their own)
-    // For authenticated users, callerKey is their principal text
     if (user != callerKey and not AccessControl.isAdmin(accessControlState, caller)) {
       Runtime.trap("Unauthorized: Can only view your own profile");
     };
-
     userProfiles.get(user);
   };
 
   public shared ({ caller }) func saveCallerUserProfile(sessionId : Text, profile : UserProfile) : async () {
-    // No authorization check needed - both authenticated users and guests can save their own profiles
     let key = determineProfileKey(caller, sessionId);
     userProfiles.add(key, profile);
   };
@@ -86,12 +81,19 @@ actor {
     let isEscape = isEscapeAttempt(userMessage.content);
 
     let (content, messageType) = if (isEscape) {
-      (
-        "*Puro quickly moves to block your path, his dark latex form shifting smoothly* Wait! Where are you going? It's dangerous out there alone. *He tilts his head with concern* Please, stay a little longer. I promise I'll keep you safe here.",
-        #action,
-      );
+      let ran = getPseudoRandomNumber() % 10;
+      if (ran < 7) {
+        (
+          "*Puro swiftly moves to block your path, his puffy fur rustling gently* Oh, please don't go! It's much safer here with me. *He kneels down to your height, masking his effort to look non-threatening* I know things are confusing, but you're not my prisoner. I just... really enjoy your company. *He offers a small, hopeful smile behind his mask*",
+          #action,
+        );
+      } else {
+        (
+          "*Puro watches sadly as you slip past him, managing to escape for now* Be careful out there! *His voice echoes softly* I'll be here if you ever want to come back. *He sighs and returns to his book, hoping you'll return*",
+          #action,
+        );
+      };
     } else {
-      // Default in-character response (not echo)
       (
         "Puro tilts his head, his latex mask reflecting the light. *Let me know if you need help or want to talk about books. I'm always here*",
         #dialogue,
@@ -106,10 +108,13 @@ actor {
     };
   };
 
-  public shared ({ caller }) func sendMessage(sessionKey : Text, message : ChatMessage) : async ChatMessage {
-    // Authorization: Users can only send messages to their own session, admins can send to any session
-    let callerKey = determineProfileKey(caller, sessionKey);
+  func getPseudoRandomNumber() : Nat {
+    nextRandomSeed := (nextRandomSeed + 15485863) % 2038074743;
+    nextRandomSeed % 10;
+  };
 
+  public shared ({ caller }) func sendMessage(sessionKey : Text, message : ChatMessage) : async ChatMessage {
+    let callerKey = determineProfileKey(caller, sessionKey);
     if (sessionKey != callerKey and not AccessControl.isAdmin(accessControlState, caller)) {
       Runtime.trap("Unauthorized: Can only send messages to your own session");
     };
@@ -150,7 +155,6 @@ actor {
   };
 
   public query ({ caller }) func getHistory(sessionKey : Text) : async [ChatMessage] {
-    // Authorization: Users can only view their own session history, admins can view any history
     let callerKey = determineProfileKey(caller, sessionKey);
 
     if (sessionKey != callerKey and not AccessControl.isAdmin(accessControlState, caller)) {

@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 15,
-  "summary": "AI roleplay chat app where the assistant roleplays as Puro and treats the roleplay scenario as genuinely happening (no meta/imaginary framing), while still supporting asterisk-marked user action messages.",
+  "projectStateVersion": 17,
+  "summary": "AI roleplay chat app where the assistant roleplays as Puro and treats the roleplay scenario as genuinely happening (no meta/imaginary framing), while still supporting asterisk-marked user action messages. Puro generally tries to prevent the user from leaving, but escape should sometimes be possible.",
   "architectural_notes": [
     "Roleplay mode should be fully in-universe: Puro treats user actions/events as реально happening and avoids meta framing (e.g., no “in your imagination”/out-of-character explanations), including for “*” action messages.",
     "Puro characterization: kind, often reads books; appearance described as a black wolf with puffy fur and a hard mask.",
-    "Puro should consistently prevent the user from running away/escaping (in-character), rather than allowing escape."
+    "Puro should generally try to prevent the user from running away/escaping (in-character), but escape should sometimes be possible (occasional/conditional success)."
   ],
   "known_issues": [],
   "isFixRequest": false,
@@ -243,6 +243,28 @@
       "summary": "Update the backend escape-attempt handling so that when the user tries to run/escape (in dialogue or action), Puro responds in-character by preventing the escape while matching the provided persona details (black wolf, puffy fur, hard mask, kind but firm). Remove contradictory descriptors in the current escape response.",
       "reqIds": [
         "REQ-24"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Adjust Puro’s escape-attempt behavior so he usually tries to stop/prevent the user from leaving in-character, but sometimes the user can successfully escape (occasional/conditional escape outcomes).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Update the backend Puro response generator so that when the user attempts to run away/escape (in dialogue or in an asterisk-marked action), Puro usually tries to stop/prevent the escape in-character, but sometimes the user can successfully escape.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Revise the backend escape-attempt response text to match the established Puro characterization (kind, book-reading black wolf with puffy fur and a hard mask) and remove contradictory descriptors currently used in the escape response.",
+      "reqIds": [
+        "REQ-26"
       ],
       "status": "pending"
     }

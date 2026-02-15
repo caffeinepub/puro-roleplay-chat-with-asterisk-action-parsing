@@ -1,53 +1,57 @@
 {
   "kind": "build_request",
-  "title": "Refine Puro persona: kind bookish black wolf with mask who prevents escape",
+  "title": "Make escape attempts usually blocked but occasionally successful in Puro roleplay",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-23",
-      "text": "Update the backend deterministic response generator so Puro’s general (non-escape) replies are consistently in-character as a kind, book-reading black wolf with puffy fur and a hard mask, instead of echoing the user’s message.",
+      "id": "REQ-25",
+      "text": "Update the backend Puro response generator so that when the user attempts to run away/escape (in dialogue or in an asterisk-marked action), Puro usually tries to stop/prevent the escape in-character, but sometimes the user can successfully escape.",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-5",
+          "msg-10"
         ],
         "quotes": [
-          "Puro is kind, reads books all the time, he is a black wolf with puffy fur with a hard mask. He never lets you run either."
+          "Puro tries not to let you leave, but sometimes you can escape."
         ]
       },
       "acceptanceCriteria": [
-        "When the user sends a normal dialogue message that is not an escape attempt, the canister returns a new Puro-authored reply that is not identical to the user’s message content.",
-        "Puro’s replies include consistent characterization cues (kind tone; references to reading/books are used naturally and occasionally; physical description is internally consistent and does not contradict the provided traits).",
-        "Responses remain fully in-universe (no meta/external framing)."
+        "Given a message whose content matches the current escape-attempt detector (e.g., contains \"run\", \"escape\", \"flee\", \"leave\", \"get away\", or \"go away\"), the backend sometimes returns an escape-attempt response that indicates the user got away/escaped (in-universe), instead of always blocking.",
+        "Across repeated escape-attempt messages in the same session, the outcome is not always the same (i.e., at least one attempt can succeed and at least one attempt can be blocked), without using any third-party services.",
+        "Non-escape messages continue to produce in-character Puro responses and do not echo the user message verbatim."
       ]
     },
     {
-      "id": "REQ-24",
-      "text": "Update the backend escape-attempt handling so that when the user tries to run/escape (in dialogue or action), Puro responds in-character by preventing the escape while matching the provided persona details (black wolf, puffy fur, hard mask, kind but firm). Remove contradictory descriptors in the current escape response.",
+      "id": "REQ-26",
+      "text": "Revise the backend escape-attempt response text to match the established Puro characterization (kind, book-reading black wolf with puffy fur and a hard mask) and remove contradictory descriptors currently used in the escape response.",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-5",
+          "msg-10"
         ],
         "quotes": [
-          "He never lets you run either."
+          "Puro tries not to let you leave, but sometimes you can escape."
         ]
       },
       "acceptanceCriteria": [
-        "Given an input message whose content matches the existing escape-attempt detection (e.g., contains \"run\"/\"escape\"/\"flee\"/\"leave\"/\"get away\"/\"go away\"), the returned Puro message attempts to stop/prevent the escape (block/chase/persuade) in a kind-but-firm manner.",
-        "The escape response does not describe Puro with conflicting traits (e.g., avoid mentioning a different body/material like a \"latex form\" if it contradicts the intended depiction).",
-        "Escape handling continues to work for both action messages (user ended input with \"*\") and normal dialogue messages."
+        "The escape-attempt response no longer describes Puro as \"dark latex\" (or other contradictory descriptors) and instead aligns with: black wolf, puffy fur, hard mask, kind but firm.",
+        "Escape-attempt responses remain fully in-universe (no meta/imagination framing) and can be expressed as action-style narration (#action) when appropriate.",
+        "The backend continues to classify user messages ending with \"*\" as #action and strips the trailing asterisk before storing/responding, as it does now."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor with all logic in backend/main.mo.",
-    "Do not modify files under frontend/src/components/ui or other immutablePaths from SYSTEM_CONTEXT."
+    "Backend must remain a single Motoko actor in backend/main.mo (no additional backend services).",
+    "Do not introduce any third-party/hosted AI or external data stores.",
+    "Use English for any user-facing text.",
+    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui."
   ],
   "nonGoals": [
-    "Changing the frontend UI, layout, or theme.",
-    "Adding new authentication methods or external AI/LLM integrations.",
-    "Introducing new backend services or databases."
+    "No new frontend UI/UX changes are required for this update.",
+    "No changes to authentication/guest session behavior.",
+    "No schema/state migration unless it becomes strictly necessary (it is not expected for this change)."
   ],
   "imageRequirements": {
     "required": [],

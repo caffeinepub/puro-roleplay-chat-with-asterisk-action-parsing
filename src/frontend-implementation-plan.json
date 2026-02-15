@@ -1,6 +1,6 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Frontend plan: no changes required for Puro persona backend-only refinements",
+  "title": "Frontend plan: no UI changes required for escape-attempt behavior update",
   "requirements": []
 }

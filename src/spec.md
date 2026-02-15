@@ -1,10 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Refine the backend’s deterministic dialogue so Puro consistently speaks in-character as a kind, bookish black wolf with puffy fur and a hard mask, including firm prevention of escape attempts.
+**Goal:** Make escape attempts in the Puro roleplay usually blocked in-character, but occasionally successful, while keeping Puro’s characterization consistent.
 
 **Planned changes:**
-- Update the backend deterministic response generator so non-escape replies produce original Puro-authored dialogue (not echoing the user) with consistent in-character cues (kind tone, occasional natural book/reading references, consistent physical traits).
-- Update escape-attempt handling so detected escape/run/flee/leave/get away/go away inputs (including action messages ending with `*`) yield a kind-but-firm response that prevents escape and removes any contradictory descriptors.
+- Update the backend escape-attempt handling so repeated escape attempts can have different outcomes, with most attempts being blocked and some resulting in a successful escape.
+- Revise escape-attempt response text to match Puro’s established traits (kind but firm black wolf with puffy fur and a hard mask) and remove contradictory descriptors.
+- Keep current message handling behavior for #action (messages ending with `*` are treated as action and the trailing `*` is stripped) and ensure non-escape messages continue producing in-character responses without verbatim echoing.
 
-**User-visible outcome:** Users receive in-universe Puro responses that stay consistently in persona during normal conversation, and escape attempts are reliably stopped with kind-but-firm, non-contradictory characterization.
+**User-visible outcome:** When the user tries to run away, Puro will usually stop them, but occasionally the user will successfully escape, with responses staying fully in-universe and consistent with Puro’s characterization.

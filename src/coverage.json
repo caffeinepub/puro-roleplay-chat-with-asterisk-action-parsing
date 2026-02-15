@@ -1,7 +1,7 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-15T01:34:14.537Z",
+  "generatedAt": "2026-02-15T02:05:12.437Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
@@ -11,15 +11,15 @@
     "implemented": 0,
     "items": [
       {
-        "id": "REQ-23",
-        "summary": "Update the backend deterministic response generator so Puro’s general (non-escape) replies are consistently in-character as a kind, book-reading black wolf with puffy fur and a hard mask, instead of echoing the user’s message.",
+        "id": "REQ-25",
+        "summary": "Update the backend Puro response generator so that when the user attempts to run away/escape (in dialogue or in an asterisk-marked action), Puro usually tries to stop/prevent the escape in-character, but sometimes the user can successfully escape.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
-        "id": "REQ-24",
-        "summary": "Update the backend escape-attempt handling so that when the user tries to run/escape (in dialogue or action), Puro responds in-character by preventing the escape while matching the provided persona details (black wolf, puffy fur, hard mask, kind but firm). Remove contradictory descriptors in the current escape response.",
+        "id": "REQ-26",
+        "summary": "Revise the backend escape-attempt response text to match the established Puro characterization (kind, book-reading black wolf with puffy fur and a hard mask) and remove contradictory descriptors currently used in the escape response.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
